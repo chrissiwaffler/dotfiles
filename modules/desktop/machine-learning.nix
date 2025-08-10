@@ -1,0 +1,186 @@
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  # Python environment with ML packages
+  pythonML = pkgs.python311.withPackages (ps: with ps; [
+    # Core ML frameworks
+    torch
+    torchvision
+    torchaudio
+    tensorflow
+    
+    # Scientific computing
+    numpy
+    scipy
+    pandas
+    scikit-learn
+    
+    # Deep learning utilities
+    transformers
+    datasets
+    accelerate
+    
+    # Visualization
+    matplotlib
+    seaborn
+    plotly
+    
+    # Jupyter and development
+    jupyter
+    jupyterlab
+    ipython
+    
+    # Other ML tools
+    opencv4
+    pillow
+    h5py
+    tensorboard
+  ]);
+in {
+  # Machine Learning Development Environment
+  
+  environment.systemPackages = with pkgs; [
+    # Python ML environment
+    pythonML
+    
+    # CUDA and GPU libraries
+    cudatoolkit
+    cudnn
+    nccl
+    
+    # Development tools
+    gcc
+    cmake
+    git
+    
+    # Data processing
+    jq
+    csvkit
+    
+    # Performance monitoring
+    btop
+    nvtop
+    
+    # Container support for ML workflows
+    docker
+    nvidia-docker
+    
+    # Additional ML tools
+    onnx
+    onnxruntime
+    
+    # Model serving
+    # tritonserver  # Uncomment if needed
+  ];
+  
+  # Docker configuration for ML containers
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = true;
+    enableNvidia = true;  # Enable NVIDIA GPU support in Docker
+  };
+  
+  # Create ML development shell script
+  environment.etc."ml-shell.nix" = {
+    text = ''
+      { pkgs ? import <nixpkgs> {} }:
+      pkgs.mkShell {
+        name = "ml-dev-shell";
+        buildInputs = with pkgs; [
+          cudatoolkit
+          cudnn
+          linuxPackages.nvidia_x11
+          
+          # Python with ML packages
+          (python311.withPackages (ps: with ps; [
+            torch
+            tensorflow
+            numpy
+            pandas
+            jupyter
+            matplotlib
+          ]))
+          
+          # Development tools
+          gcc
+          cmake
+          git
+        ];
+        
+        shellHook = '''
+          echo "🤖 Machine Learning Development Environment"
+          echo "CUDA Version: $(nvcc --version | grep release | awk '{print $6}')"
+          echo "Python: $(python --version)"
+          echo "PyTorch: $(python -c 'import torch; print(torch.__version__)' 2>/dev/null || echo 'Not available')"
+          echo "TensorFlow: $(python -c 'import tensorflow; print(tensorflow.__version__)' 2>/dev/null || echo 'Not available')"
+          echo ""
+          echo "GPU Available: $(python -c 'import torch; print(torch.cuda.is_available())' 2>/dev/null || echo 'Check failed')"
+          
+          export CUDA_PATH=${pkgs.cudatoolkit}
+          export LD_LIBRARY_PATH=${pkgs.linuxPackages.nvidia_x11}/lib:${pkgs.ncurses5}/lib:$LD_LIBRARY_PATH
+          export EXTRA_LDFLAGS="-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib"
+          export EXTRA_CCFLAGS="-I/usr/include"
+        ''';
+      }
+    '';
+  };
+  
+  # Jupyter configuration
+  services.jupyter = {
+    enable = false;  # Set to true if you want system-wide Jupyter
+    # port = 8888;
+    # password = ""; # Set a password hash here
+    # kernels = {
+    #   python3 = {
+    #     displayName = "Python 3 ML";
+    #     argv = [
+    #       "${pythonML}/bin/python"
+    #       "-m"
+    #       "ipykernel_launcher"
+    #       "-f"
+    #       "{connection_file}"
+    #     ];
+    #   };
+    # };
+  };
+  
+  # System optimizations for ML workloads
+  boot.kernel.sysctl = {
+    # Increase shared memory for parallel processing
+    "kernel.shmmax" = 68719476736;  # 64GB
+    "kernel.shmall" = 16777216;     # 64GB / 4096
+    
+    # Optimize for compute workloads
+    "vm.swappiness" = 10;
+    "vm.dirty_ratio" = 15;
+    "vm.dirty_background_ratio" = 5;
+  };
+  
+  # Environment variables for ML
+  environment.sessionVariables = {
+    # PyTorch
+    TORCH_CUDA_ARCH_LIST = "8.0;8.6;8.9;9.0";  # Support for modern NVIDIA GPUs
+    
+    # TensorFlow
+    TF_FORCE_GPU_ALLOW_GROWTH = "true";
+    TF_CPP_MIN_LOG_LEVEL = "2";  # Reduce TF verbosity
+    
+    # CUDA
+    CUDA_VISIBLE_DEVICES = "0";  # Default to first GPU
+    
+    # XLA optimization
+    XLA_FLAGS = "--xla_gpu_cuda_data_dir=${pkgs.cudatoolkit}";
+  };
+  
+  # Aliases for common ML tasks
+  programs.bash.shellAliases = {
+    ml-shell = "nix-shell /etc/ml-shell.nix";
+    jupyter-lab = "${pythonML}/bin/jupyter lab";
+    tensorboard = "${pythonML}/bin/tensorboard";
+    gpu-status = "nvidia-smi";
+    gpu-watch = "watch -n 1 nvidia-smi";
+  };
+}

@@ -1,0 +1,18 @@
+# Hardware configurations (machine-specific)
+hosts/*/hardware-configuration.nix
+
+# Nix result symlinks
+result
+result-*
+
+# Direnv
+.direnv/
+.envrc.local
+
+# Editor directories
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db

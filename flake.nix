@@ -35,20 +35,57 @@
 
       # configs
       config-base = import ./profiles/base.nix inputs;
-      # could define a minimal version and add it here
+      config-desktop = import ./profiles/desktop.nix inputs;
     };
 
-    # standalone home-manager configurations
+    # NixOS configurations
+    nixosConfigurations = {
+      desktop = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = {inherit inputs;};
+        modules = [
+          # Host-specific configuration
+          ./hosts/desktop/configuration.nix
+          
+          # Home-manager integration
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              extraSpecialArgs = {inherit inputs;};
+              users.chrissi = import ./profiles/desktop.nix;
+            };
+          }
+        ];
+      };
+    };
+
+    # standalone home-manager configurations (for non-NixOS systems)
     homeConfigurations = {
       "chrissi@linux" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        modules = [(import ./home inputs)];
+        modules = [
+          ./profiles/desktop.nix
+          {
+            home.username = "chrissi";
+            home.homeDirectory = "/home/chrissi";
+            home.stateVersion = "24.05";
+          }
+        ];
         extraSpecialArgs = {inherit inputs;};
       };
 
       "chrissi@darwin" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.aarch64-darwin;
-        modules = [(import ./home inputs)];
+        pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+        modules = [
+          ./profiles/base.nix
+          {
+            home.username = "chrissi";
+            home.homeDirectory = "/Users/chrissi";
+            home.stateVersion = "24.05";
+          }
+        ];
         extraSpecialArgs = {inherit inputs;};
       };
     };
