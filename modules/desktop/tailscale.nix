@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   # Enable Tailscale service
   services.tailscale = {
     enable = true;
@@ -13,14 +18,14 @@
   # Firewall configuration for Tailscale
   networking.firewall = {
     # Trust the Tailscale interface
-    trustedInterfaces = [ "tailscale0" ];
-    
+    trustedInterfaces = ["tailscale0"];
+
     # Allow Tailscale's UDP port
-    allowedUDPPorts = [ 41641 ];
-    
+    allowedUDPPorts = [41641];
+
     # Optional: Allow SSH from Tailscale network
     # This allows SSH connections from other devices on your Tailscale network
-    allowedTCPPorts = [ 22 ];
+    allowedTCPPorts = [22];
   };
 
   # Enable SSH service for remote access
@@ -44,15 +49,15 @@
   # This will run once on boot if not already authenticated
   systemd.services.tailscale-autoconnect = {
     description = "Automatic connection to Tailscale";
-    after = [ "network-pre.target" "tailscale.service" ];
-    wants = [ "network-pre.target" "tailscale.service" ];
-    wantedBy = [ "multi-user.target" ];
-    
+    after = ["network-pre.target" "tailscale.service"];
+    wants = ["network-pre.target" "tailscale.service"];
+    wantedBy = ["multi-user.target"];
+
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
     };
-    
+
     script = ''
       # Check if we're already authenticated
       status="$(${pkgs.tailscale}/bin/tailscale status --json | ${pkgs.jq}/bin/jq -r .BackendState)"
@@ -62,14 +67,14 @@
 
       # NOTE: You need to generate an auth key from the Tailscale admin console
       # https://login.tailscale.com/admin/settings/keys
-      # 
+      #
       # For initial setup, run manually:
       # sudo tailscale up --authkey=tskey-auth-YOUR-KEY-HERE
       #
       # For automated setup, you can:
       # 1. Store the key in a secure location (e.g., using sops-nix or agenix)
       # 2. Or run the authentication manually after first boot
-      
+
       echo "Tailscale is not authenticated. Please run:"
       echo "sudo tailscale up"
       echo "Or if you have an auth key:"
@@ -77,3 +82,4 @@
     '';
   };
 }
+
