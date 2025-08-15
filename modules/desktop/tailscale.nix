@@ -37,12 +37,10 @@
     };
   };
 
-  # Optional: Add SSH keys here for backup/declarative configuration
   # These keys are added in addition to ~/.ssh/authorized_keys
   # Useful for disaster recovery or fresh installations
   users.users.chrissi.openssh.authorizedKeys.keys = [
-    # Example:
-    # "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAI... your-email@example.com"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN4V1OCAHZiCphUzMleHrIaxjOg0gcFx/8ywRJFcCLUM chrissi@Christophs-MBP"
   ];
 
   # Create a systemd service to authenticate with Tailscale
