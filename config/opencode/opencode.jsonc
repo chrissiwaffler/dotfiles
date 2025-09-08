@@ -1,0 +1,16 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  // using z.ai glm 4.5 via their pro coding plan ($15)
+  "provider": {
+    "zai": {
+      "options": {
+        "baseURL": "https://api.z.ai/api/coding/paas/v4",
+      },
+    },
+    "openrouter": {
+      "models": {
+        "qwen/qwen3-coder:free": {},
+      },
+    },
+  },
+}

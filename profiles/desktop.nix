@@ -9,6 +9,7 @@
     ./base.nix
     ../modules/desktop/hyprland.nix
     ../modules/desktop/tools.nix
+    ../modules/desktop/config.nix
   ];
 
   # Enable desktop-specific services
