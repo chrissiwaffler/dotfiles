@@ -4,19 +4,61 @@
   pkgs,
   ...
 }: {
+  # Session variables for Wayland + NVIDIA
+  home.sessionVariables = {
+    # Wayland session
+    XDG_SESSION_TYPE = "wayland";
+    XDG_CURRENT_DESKTOP = "Hyprland";
+    XDG_SESSION_DESKTOP = "Hyprland";
+    
+    # NVIDIA-specific for Hyprland
+    LIBVA_DRIVER_NAME = "nvidia";
+    GBM_BACKEND = "nvidia-drm";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    WLR_NO_HARDWARE_CURSORS = "1";  # Required for NVIDIA
+    WLR_DRM_NO_ATOMIC = "1";  # May help with some NVIDIA issues
+    
+    # Electron/Chrome apps
+    NIXOS_OZONE_WL = "1";
+    
+    # VA-API
+    NVD_BACKEND = "direct";
+    
+    # Qt
+    QT_QPA_PLATFORM = "wayland";
+    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+  };
+  
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
+    systemd.enable = true;  # Enable systemd integration
     
     settings = {
       # Monitor configuration (adjust to your setup)
       monitor = ",preferred,auto,1";
       
+      # NVIDIA-specific settings
+      env = [
+        "LIBVA_DRIVER_NAME,nvidia"
+        "XDG_SESSION_TYPE,wayland"
+        "GBM_BACKEND,nvidia-drm"
+        "__GLX_VENDOR_LIBRARY_NAME,nvidia"
+        "WLR_NO_HARDWARE_CURSORS,1"
+      ];
+      
+      # Misc settings for NVIDIA
+      misc = {
+        #no_direct_scanout = true;  # May help with fullscreen issues on NVIDIA
+        vrr = 1;  # Variable refresh rate (if your monitor supports it)
+      };
+      
       # Execute at launch
       exec-once = [
-        "waybar"
-        "dunst"
-        "swww init"
+        "${pkgs.waybar}/bin/waybar"
+        "${pkgs.dunst}/bin/dunst"
+        "${pkgs.swww}/bin/swww init"
+        "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
       ];
       
       # Input configuration
@@ -50,10 +92,13 @@
           passes = 1;
         };
         
-        drop_shadow = true;
-        shadow_range = 4;
-        shadow_render_power = 3;
-        "col.shadow" = "rgba(1a1a1aee)";
+        shadow = {
+          enabled = true;
+          range = 4;
+          render_power = 3;
+          color = "rgba(1a1a1aee)";
+          color_inactive = "rgba(1a1a1a99)";
+        };
       };
       
       # Animations
@@ -79,7 +124,8 @@
       
       # Master layout
       master = {
-        new_is_master = true;
+        new_status = "master";
+        new_on_top = true;
       };
       
       # Window rules
@@ -94,10 +140,10 @@
       # Key bindings
       bind = [
         # Program launchers
-        "$mod, Return, exec, kitty"
-        "$mod, D, exec, rofi -show drun"
+        "$mod, Return, exec, ${pkgs.kitty}/bin/kitty"
+        "$mod, D, exec, ${pkgs.rofi-wayland}/bin/rofi -show drun"
         "$mod, B, exec, firefox"
-        "$mod, E, exec, nautilus"
+        "$mod, E, exec, ${pkgs.nautilus}/bin/nautilus"
         
         # Window management
         "$mod, Q, killactive,"
@@ -245,15 +291,15 @@
             critical = 15;
           };
           format = "{icon} {capacity}%";
-          format-charging = " {capacity}%";
-          format-plugged = " {capacity}%";
-          format-icons = ["" "" "" "" ""];
+          format-charging = "⚡ {capacity}%";
+          format-plugged = "🔌 {capacity}%";
+          format-icons = ["🪫" "🔋" "🔋" "🔋" "🔋"];
         };
         
         network = {
-          format-wifi = " {signalStrength}%";
-          format-ethernet = " {ipaddr}";
-          format-disconnected = "� Disconnected";
+          format-wifi = "📶 {signalStrength}%";
+          format-ethernet = "🌐 {ipaddr}";
+          format-disconnected = "❌ Disconnected";
           tooltip-format = "{ifname}: {ipaddr}";
         };
         
@@ -332,7 +378,7 @@
   # Enable kitty terminal
   programs.kitty = {
     enable = true;
-    theme = "Tokyo Night";
+    # themeFile = "tokyo_night";  # Commented out - theme not available in kitty-themes package
     settings = {
       font_family = "JetBrainsMono Nerd Font";
       font_size = 12;

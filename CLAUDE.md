@@ -25,6 +25,26 @@ home-manager switch --flake .#chrissi@linux    # For Linux systems
 home-manager switch --flake .#chrissi@darwin   # For macOS systems
 ```
 
+### Hyprland Configuration Validation
+
+```bash
+# Run comprehensive Hyprland configuration validation
+./scripts/validate-hyprland.sh
+
+# Individual validation checks:
+# Check if Hyprland is enabled
+nix --extra-experimental-features 'nix-command flakes' eval .#homeConfigurations."chrissi@linux".config.wayland.windowManager.hyprland.enable
+
+# Validate Hyprland settings structure
+nix --extra-experimental-features 'nix-command flakes' eval .#homeConfigurations."chrissi@linux".config.wayland.windowManager.hyprland.settings
+
+# Dry-run build without applying
+nix --extra-experimental-features 'nix-command flakes' build .#homeConfigurations."chrissi@linux".activationPackage --dry-run
+
+# Check syntax of Hyprland module
+nix-instantiate --parse modules/desktop/hyprland.nix
+```
+
 ## Architecture & Structure
 
 ### Module Organization

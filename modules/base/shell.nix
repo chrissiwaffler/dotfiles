@@ -73,7 +73,7 @@
       mv = "mv -i";
     };
 
-    initExtra = ''
+    initContent = ''
       # Better key bindings
       bindkey '^[[A' history-substring-search-up
       bindkey '^[[B' history-substring-search-down

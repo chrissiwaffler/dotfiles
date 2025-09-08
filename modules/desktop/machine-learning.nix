@@ -161,8 +161,8 @@ in {
   
   # Environment variables for ML
   environment.sessionVariables = {
-    # PyTorch
-    TORCH_CUDA_ARCH_LIST = "8.0;8.6;8.9;9.0";  # Support for modern NVIDIA GPUs
+    # PyTorch - RTX 5090 support
+    TORCH_CUDA_ARCH_LIST = "12.0";  # RTX 5090 sm_120 capability
     
     # TensorFlow
     TF_FORCE_GPU_ALLOW_GROWTH = "true";

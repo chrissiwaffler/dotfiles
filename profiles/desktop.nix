@@ -2,73 +2,77 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }: {
   imports = [
     ./base.nix
     ../modules/desktop/hyprland.nix
-    ../modules/desktop/nvidia.nix
-    ../modules/desktop/machine-learning.nix
-    ../modules/desktop/performance.nix
+    ../modules/desktop/tools.nix
   ];
-  
+
   # Enable desktop-specific services
   services = {
     # Enable GPG agent for desktop
     gpg-agent = {
       enable = true;
       enableSshSupport = true;
-      pinentryPackage = pkgs.pinentry-gnome3;
+      pinentry.package = pkgs.pinentry-gnome3;
     };
-    
+
     # Enable syncthing for file sync
     syncthing.enable = true;
   };
-  
+
   # Desktop-specific packages
   home.packages = with pkgs; [
     # Browsers
     firefox
     chromium
-    
+
     # Communication
     discord
     slack
     signal-desktop
-    
+
     # Media
     mpv
     spotify
     obs-studio
-    
+
     # Graphics
     gimp
     inkscape
-    
+
     # Office
     libreoffice
     obsidian
-    
+
     # Development (GUI tools)
     vscode
     insomnia
     dbeaver-bin
-    
+
     # System tools
-    gnome.gnome-disk-utility
-    gnome.seahorse
-    
+    gnome-disk-utility
+    seahorse
+
     # Fonts
-    (nerdfonts.override { fonts = [ "JetBrainsMono" "FiraCode" "Hack" ]; })
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.fira-code
+    nerd-fonts.hack
     font-awesome
     noto-fonts
     noto-fonts-emoji
     liberation_ttf
+
+    openrgb
+    liquidctl
   ];
-  
+
   # Font configuration
   fonts.fontconfig.enable = true;
-  
+
   # XDG desktop integration
   xdg = {
     enable = true;
@@ -88,7 +92,7 @@
       };
     };
   };
-  
+
   # GTK theme configuration
   gtk = {
     enable = true;
@@ -112,14 +116,14 @@
       gtk-application-prefer-dark-theme = true;
     };
   };
-  
+
   # Qt theme configuration
   qt = {
     enable = true;
     platformTheme.name = "gtk";
     style.name = "gtk2";
   };
-  
+
   # Enable dconf for GTK settings persistence
   dconf.enable = true;
 }

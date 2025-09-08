@@ -32,10 +32,6 @@
   in {
     nixosModules = {
       home-manager = home-manager.nixosModules.home-manager;
-
-      # configs
-      config-base = import ./profiles/base.nix inputs;
-      config-desktop = import ./profiles/desktop.nix inputs;
     };
 
     # NixOS configurations
@@ -55,6 +51,8 @@
               useUserPackages = true;
               extraSpecialArgs = {inherit inputs;};
               users.chrissi = import ./profiles/desktop.nix;
+              # Backup existing files instead of failing
+              backupFileExtension = "backup";
             };
           }
         ];

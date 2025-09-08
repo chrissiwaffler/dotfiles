@@ -1,7 +1,8 @@
-inputs: {
+{
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }: {
   imports = [
@@ -20,7 +21,7 @@ inputs: {
       then "/Users/chrissi"
       else "/home/chrissi"
     );
-    stateVersion = "25.05";
+    stateVersion = lib.mkDefault "25.05";
 
     # env variables
     sessionVariables = {
@@ -81,7 +82,7 @@ inputs: {
     ];
   };
 
-  nixpkgs.config.allowUnfree = true;
+  # nixpkgs.config.allowUnfree = true; # Removed - using global nixpkgs with useGlobalPkgs
 
   # XDG base directories
   xdg = {

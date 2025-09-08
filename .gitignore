@@ -1,6 +1,3 @@
-# Hardware configurations (machine-specific)
-hosts/*/hardware-configuration.nix
-
 # Nix result symlinks
 result
 result-*

@@ -4,80 +4,188 @@
   pkgs,
   ...
 }: {
-  # NVIDIA RTX 5090 GPU Configuration
-  
-  # Allow unfree packages (NVIDIA drivers are proprietary)
-  nixpkgs.config.allowUnfree = true;
-  
-  # Enable OpenGL
-  hardware.opengl = {
+  # Enable NVIDIA drivers - prioritize over integrated graphics
+  services.xserver.videoDrivers = ["nvidia"];
+
+  # Disable integrated AMD graphics
+  boot.blacklistedKernelModules = ["amdgpu" "radeon"];
+
+  hardware.nvidia = {
+    # Use the latest production driver
+    # RTX 5090 requires the latest drivers
+    package = config.boot.kernelPackages.nvidiaPackages.production;
+
+    # Modesetting is required for Wayland
+    modesetting.enable = true;
+
+    # Power management (important for laptops, optional for desktops)
+    powerManagement.enable = true;
+
+    # Enable the NVIDIA settings menu
+    nvidiaSettings = true;
+
+    # Use the open kernel module (recommended for newer GPUs like RTX 5090)
+    # This provides better Wayland support
+    open = true;
+
+    # Enable Dynamic Boost (if supported)
+    dynamicBoost.enable = false; # Set to true if you want dynamic boost
+
+    # Fine-grained power management
+    powerManagement.finegrained = false;
+  };
+
+  # Graphics configuration with NVIDIA
+  hardware.graphics = {
     enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
+    enable32Bit = true;
+
+    # Extra packages for NVIDIA
     extraPackages = with pkgs; [
-      intel-media-driver
-      vaapiIntel
+      nvidia-vaapi-driver # VA-API implementation
       vaapiVdpau
       libvdpau-va-gl
+    ];
+
+    extraPackages32 = with pkgs.pkgsi686Linux; [
       nvidia-vaapi-driver
+      vaapiVdpau
+      libvdpau-va-gl
     ];
   };
-  
-  # Load NVIDIA driver for Xorg and Wayland
-  services.xserver.videoDrivers = ["nvidia"];
-  
-  # NVIDIA configuration
-  hardware.nvidia = {
-    # Modesetting is required for Wayland compositors
-    modesetting.enable = true;
-    
-    # Power management (can cause sleep/suspend issues)
-    powerManagement.enable = false;
-    powerManagement.finegrained = false;
-    
-    # Use open kernel module (recommended for Turing and newer)
-    open = true;
-    
-    # Enable the nvidia-settings GUI tool
-    nvidiaSettings = true;
-    
-    # Select the appropriate driver version for RTX 5090
-    # Note: You may need to use beta/production drivers for newest GPUs
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-    # Alternative for newer GPUs:
-    # package = config.boot.kernelPackages.nvidiaPackages.production;
-    # package = config.boot.kernelPackages.nvidiaPackages.beta;
-  };
-  
-  # Enable CUDA support globally
-  nixpkgs.config.cudaSupport = true;
-  
-  # Environment variables for NVIDIA
-  environment.sessionVariables = {
-    # Force NVIDIA GPU for rendering
-    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-    WLR_NO_HARDWARE_CURSORS = "1"; # Needed for some Wayland compositors
-    NIXOS_OZONE_WL = "1"; # Hint for Electron apps to use Wayland
-    
-    # CUDA environment
-    CUDA_CACHE_PATH = "$HOME/.cache/cuda";
-  };
-  
-  # Additional kernel modules for NVIDIA
-  boot.initrd.kernelModules = [ "nvidia" ];
-  boot.extraModulePackages = [ config.boot.kernelPackages.nvidia_x11 ];
-  
-  # Kernel parameters for better NVIDIA support
+
+  # Kernel parameters for NVIDIA
   boot.kernelParams = [
+    # Enable DRM kernel mode setting
     "nvidia-drm.modeset=1"
-    "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
+
+    # Enable framebuffer console
+    "nvidia-drm.fbdev=1"
+
+    # Disable GSP firmware (can help with some issues)
+    # Uncomment if you experience problems
+    # "nvidia.NVreg_EnableGpuFirmware=0"
   ];
-  
-  # System packages for GPU monitoring and management
+
+  # Early KMS for NVIDIA
+  boot.initrd.kernelModules = [
+    "nvidia"
+    "nvidia_modeset"
+    "nvidia_uvm"
+    "nvidia_drm"
+  ];
+
+  # Environment variables for NVIDIA + Wayland
+  environment.sessionVariables = {
+    # Force GBM backend
+    GBM_BACKEND = "nvidia-drm";
+
+    # OpenGL vendor
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+
+    # Wayland compatibility
+    LIBVA_DRIVER_NAME = "nvidia";
+    WLR_NO_HARDWARE_CURSORS = "1"; # Required for NVIDIA
+
+    # Enable VA-API on NVIDIA
+    NVD_BACKEND = "direct";
+
+    # XDG Session
+    XDG_SESSION_TYPE = "wayland";
+
+    # Electron apps fix
+    NIXOS_OZONE_WL = "1";
+
+    # Direct rendering for NVIDIA
+    __GL_GSYNC_ALLOWED = "1";
+    __GL_VRR_ALLOWED = "1"; # Enable VRR if monitor supports it
+
+    # Performance tuning
+    __GL_SHADER_DISK_CACHE = "1";
+    __GL_SHADER_DISK_CACHE_SKIP_CLEANUP = "1";
+
+    # CUDA environment for RTX 5090
+    CUDA_HOME = "${pkgs.cudaPackages.cudatoolkit}";
+    CUDA_ROOT = "${pkgs.cudaPackages.cudatoolkit}";
+    CUDA_PATH = "${pkgs.cudaPackages.cudatoolkit}";
+    NVCC_PREPEND_FLAGS = "-ccbin ${pkgs.gcc}/bin/gcc";
+    CUDA_CACHE_DISABLE = "0";
+    TORCH_CUDA_ARCH_LIST = "12.0"; # RTX 5090 sm_120 capability
+
+    # PyTorch optimizations
+    PYTORCH_CUDA_ALLOC_CONF = "expandable_segments:True";
+
+    # Model cache location
+    HF_HOME = "$HOME/.cache/huggingface";
+  };
+
+  # RTX 5090 support - append to LD_LIBRARY_PATH without conflicts
+  environment.extraInit = ''
+    export LD_LIBRARY_PATH="/run/current-system/sw/share/nix-ld/lib:/run/opengl-driver/lib:''${LD_LIBRARY_PATH:-}"
+  '';
+
+  # Enable nix-ld for PyTorch nightly compatibility
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      stdenv.cc.cc.lib
+      glibc
+      cudaPackages.cudatoolkit
+      cudaPackages.cudnn
+      zlib
+      openssl
+    ];
+  };
+
+  # Fix Triton/vLLM ldconfig path issue
+  environment.pathsToLink = ["/sbin"];
+
+  # Create a simple ldconfig wrapper that handles the cache issue
+  environment.etc."ldconfig-wrapper" = {
+    text = ''
+      #!/bin/sh
+      # Wrapper for ldconfig that works with NixOS
+      if [ "$1" = "-p" ]; then
+        # For -p flag, just return empty (Triton will handle missing libraries gracefully)
+        exit 0
+      else
+        # For other operations, call real ldconfig
+        exec ${pkgs.glibc.bin}/bin/ldconfig "$@"
+      fi
+    '';
+    mode = "0755";
+  };
+
+  # Create symlink to use our wrapper
+  systemd.tmpfiles.rules = [
+    "L+ /sbin/ldconfig - - - - /etc/ldconfig-wrapper"
+  ];
+
+  environment.variables = {
+    C_INCLUDE_PATH = "${pkgs.python311Full}/include/python3.11";
+    CPLUS_INCLUDE_PATH = "${pkgs.python311Full}/include/python3.11";
+  };
+
+  # Additional packages for NVIDIA utilities
   environment.systemPackages = with pkgs; [
-    nvtop          # GPU process monitoring
-    nvidia-smi     # NVIDIA System Management Interface
-    cudatoolkit    # CUDA toolkit
-    cudnn          # CUDA Deep Neural Network library
+    nvtopPackages.full # GPU monitoring
+    nvidia-vaapi-driver
+    egl-wayland
+    libva-utils
+    glxinfo
+    vulkan-tools
+    wayland-utils
+
+    # AI development essentials
+    python311
+    python311Full
+    gcc
+    pkg-config
+    uv
+    git-lfs
+
+    # CUDA development tools
+    cudaPackages.cudatoolkit
+    gcc
   ];
 }

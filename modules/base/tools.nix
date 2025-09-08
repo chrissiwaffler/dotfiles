@@ -23,7 +23,7 @@
 
     # Compilers & interpreters
     gcc
-    clang
+    # clang # Commented out to avoid conflict with gcc
     rustc
     cargo
     go
@@ -46,9 +46,10 @@
     # Python ML packages (better managed via shell.nix per project)
     # but these are useful globally
     python311Packages.ipython
-    python311Packages.jupyter
-    python311Packages.notebook
-    python311Packages.jupyterlab
+    # Temporarily disabled due to build issues
+    # python311Packages.jupyter
+    # python311Packages.notebook
+    # python311Packages.jupyterlab
     python311Packages.numpy
     python311Packages.pandas
     python311Packages.matplotlib
@@ -69,7 +70,7 @@
     dive # Docker image explorer
 
     # Kubernetes
-    kubectl
+    # kubectl # k3s includes kubectl, so we don't need standalone
     kubernetes-helm
     k9s # Terminal UI for k8s
     k3s
@@ -78,6 +79,7 @@
     # === Productivity Tools ===
 
     # Terminal multiplexer & utils
+    tmux
     screen
 
     # File management
