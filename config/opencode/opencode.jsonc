@@ -1,5 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "theme": "monokai",
   // using z.ai glm 4.5 via their pro coding plan ($15)
   "provider": {
     "zai": {
