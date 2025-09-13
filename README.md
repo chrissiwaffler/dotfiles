@@ -30,3 +30,26 @@ for syncing work between machines (e.g., also secrets) when git would be too muc
 - copy the device id from the one and add it to the other; then accept the request
 - then select the folder that needs to be synced, add, share it for the other device and accept the request
 - then also configure files that need to be ignored
+
+# GPU Server usage, ubuntu installed
+
+Quick setup for development environment on GPU servers:
+
+## Prerequisites
+
+- Ubuntu/Debian GPU server with root access
+- Nix installed (see installation steps below)
+
+## Installation
+
+```bash
+# install Nix (if not already done)
+$ sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --daemon
+
+# clone dotfiles
+git clone https://github.com/chrissiwaffler/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+
+# install server config
+nix run home-manager -- switch --flake .#chrissi@runpod
+```

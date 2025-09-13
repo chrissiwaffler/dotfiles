@@ -42,7 +42,7 @@
         modules = [
           # Host-specific configuration
           ./hosts/desktop/configuration.nix
-          
+
           # Home-manager integration
           home-manager.nixosModules.home-manager
           {
@@ -82,6 +82,20 @@
             home.username = "chrissi";
             home.homeDirectory = "/Users/chrissi";
             home.stateVersion = "24.05";
+          }
+        ];
+        extraSpecialArgs = {inherit inputs;};
+      };
+
+      "chrissi@server" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        modules = [
+          ./profiles/server.nix
+          {
+            home.username = "root";
+            home.homeDirectory = "/root";
+            home.stateVersion = "24.05";
+            nixpkgs.config.allowUnfree = true;
           }
         ];
         extraSpecialArgs = {inherit inputs;};
