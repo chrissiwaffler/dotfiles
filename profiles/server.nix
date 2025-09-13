@@ -44,7 +44,6 @@
     patch
     flex
     bison
-    clang
     llvm
 
     # dev headers
