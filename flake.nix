@@ -92,8 +92,8 @@
         modules = [
           ./profiles/server.nix
           {
-            home.username = builtins.getEnv "USER";
-            home.homeDirectory = "/home/${builtins.getEnv "USER"}";
+            home.username = "chrissi";
+            home.homeDirectory = "/home/chrissi";
             home.stateVersion = "24.05";
             nixpkgs.config.allowUnfree = true;
           }
