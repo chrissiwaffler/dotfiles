@@ -27,6 +27,7 @@
     home-manager,
     ...
   } @ inputs: let
+    lib = nixpkgs.lib;
     systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
     forAllSystems = nixpkgs.lib.genAttrs systems;
   in {
@@ -95,8 +96,12 @@
         modules = [
           ./profiles/base.nix
           {
-            home.username = builtins.getEnv "USER";
-            home.homeDirectory = "/home/${builtins.getEnv "USER"}";
+            home.username = 
+              let user = builtins.getEnv "USER";
+              in if user == "" then "ubuntu" else user;
+            home.homeDirectory = 
+              let user = builtins.getEnv "USER";
+              in if user == "" then "/home/ubuntu" else "/home/${user}";
             home.stateVersion = "24.05";
             nixpkgs.config.allowUnfree = true;
           }
