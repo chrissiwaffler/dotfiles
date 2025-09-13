@@ -33,7 +33,7 @@ for syncing work between machines (e.g., also secrets) when git would be too muc
 
 # GPU Server usage, ubuntu installed
 
-Quick setup for development environment on GPU servers:
+Quick setup for development environment on GPU servers (NOT via container access, should be a VM or bare metal):
 
 ## Prerequisites
 
@@ -44,12 +44,22 @@ Quick setup for development environment on GPU servers:
 
 ```bash
 # install Nix (if not already done)
-$ sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --daemon
+sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --daemon
+
+# logout and login again, inorder to have nix loaded
+exit
+ssh ...
 
 # clone dotfiles
 git clone https://github.com/chrissiwaffler/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
+# nix config directory erstellen
+mkdir -p ~/.config/nix
+
+# experimental features permanent aktivieren
+echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+
 # install server config
-nix run home-manager -- switch --flake .#chrissi@runpod
+nix run home-manager -- switch --flake .#chrissi@server
 ```
