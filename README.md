@@ -61,5 +61,5 @@ mkdir -p ~/.config/nix
 echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 
 # install server config
-nix run home-manager -- switch --flake .#chrissi@server
+nix run home-manager -- switch --flake .#base
 ```

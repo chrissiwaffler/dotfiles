@@ -87,13 +87,16 @@
         extraSpecialArgs = {inherit inputs;};
       };
 
-      "chrissi@server" = home-manager.lib.homeManagerConfiguration {
+      
+
+      # Simple base configuration for any user
+      "base" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [
-          ./profiles/server.nix
+          ./profiles/base.nix
           {
-            home.username = "chrissi";
-            home.homeDirectory = "/home/chrissi";
+            home.username = builtins.getEnv "USER";
+            home.homeDirectory = "/home/${builtins.getEnv "USER"}";
             home.stateVersion = "24.05";
             nixpkgs.config.allowUnfree = true;
           }

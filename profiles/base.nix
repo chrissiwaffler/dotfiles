@@ -79,6 +79,45 @@
       lolcat
       cowsay
       sl
+
+      # Python ML essentials
+      python311
+      python311Packages.pip
+      uv
+
+      # Container stuff
+      docker
+      docker-compose
+
+      # GPU monitoring
+      nvtopPackages.full
+
+      # Network tools for remote work
+      tmux
+      mosh # better than ssh for unstable connections
+
+      # Additional dev tools
+      nodejs_22
+      go
+
+      # Benchmarks/profiling
+      hyperfine
+      perf-tools
+
+      # Build tools from standard build-essentials
+      autoconf
+      automake
+      libtool
+      m4
+      patch
+      flex
+      bison
+      llvm
+
+      # Dev headers
+      zlib.dev
+      openssl.dev
+      libffi.dev
     ];
   };
 
