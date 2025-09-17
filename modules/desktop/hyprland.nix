@@ -141,7 +141,7 @@
       bind = [
         # Program launchers
         "$mod, Return, exec, ${pkgs.kitty}/bin/kitty"
-        "$mod, D, exec, ${pkgs.rofi-wayland}/bin/rofi -show drun"
+        "$mod, D, exec, ${pkgs.rofi}/bin/rofi -show drun"
         "$mod, B, exec, firefox"
         "$mod, E, exec, ${pkgs.nautilus}/bin/nautilus"
         
@@ -223,7 +223,7 @@
     kitty
     
     # Application launcher
-    rofi-wayland
+    rofi
     
     # Status bar
     waybar
@@ -371,7 +371,7 @@
   # Rofi configuration
   programs.rofi = {
     enable = true;
-    package = pkgs.rofi-wayland;
+    package = pkgs.rofi;
     theme = "Arc-Dark";
   };
   

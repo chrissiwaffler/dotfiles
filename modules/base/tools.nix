@@ -155,8 +155,10 @@
   # Go
   programs.go = {
     enable = true;
-    goPath = ".local/share/go";
-    goBin = ".local/bin";
+    env = {
+      GOPATH = ".local/share/go";
+      GOBIN = ".local/bin";
+    };
   };
 
   # Node.js global packages

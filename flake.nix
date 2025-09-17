@@ -70,6 +70,7 @@
             home.username = "chrissi";
             home.homeDirectory = "/home/chrissi";
             home.stateVersion = "24.05";
+            nixpkgs.config.allowUnfree = true;
           }
         ];
         extraSpecialArgs = {inherit inputs;};
@@ -88,20 +89,24 @@
         extraSpecialArgs = {inherit inputs;};
       };
 
-      
-
       # Simple base configuration for any user
       "base" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [
           ./profiles/base.nix
           {
-            home.username = 
-              let user = builtins.getEnv "USER";
-              in if user == "" then "ubuntu" else user;
-            home.homeDirectory = 
-              let user = builtins.getEnv "USER";
-              in if user == "" then "/home/ubuntu" else "/home/${user}";
+            home.username = let
+              user = builtins.getEnv "USER";
+            in
+              if user == ""
+              then "ubuntu"
+              else user;
+            home.homeDirectory = let
+              user = builtins.getEnv "USER";
+            in
+              if user == ""
+              then "/home/ubuntu"
+              else "/home/${user}";
             home.stateVersion = "24.05";
             nixpkgs.config.allowUnfree = true;
           }

@@ -162,8 +162,8 @@
   ];
 
   environment.variables = {
-    C_INCLUDE_PATH = "${pkgs.python311Full}/include/python3.11";
-    CPLUS_INCLUDE_PATH = "${pkgs.python311Full}/include/python3.11";
+    C_INCLUDE_PATH = "${pkgs.python311}/include/python3.11";
+    CPLUS_INCLUDE_PATH = "${pkgs.python311}/include/python3.11";
   };
 
   # Additional packages for NVIDIA utilities
@@ -178,7 +178,7 @@
 
     # AI development essentials
     python311
-    python311Full
+    python311Packages.tkinter
     gcc
     pkg-config
     uv
