@@ -22,7 +22,10 @@
     };
 
     # Enable syncthing for file sync
-    syncthing.enable = true;
+    syncthing = {
+      enable = true;
+      extraOptions = ["--allow-newer-config"];
+    };
   };
 
   # Desktop-specific packages
@@ -53,6 +56,9 @@
     vscode
     insomnia
     dbeaver-bin
+
+    # AI coding assistant
+    inputs.self.packages.${pkgs.system}.opencode
 
     # System tools
     gnome-disk-utility
