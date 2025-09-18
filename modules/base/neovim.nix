@@ -63,11 +63,11 @@
     extraPython3Packages = ps:
       with ps; [
         pynvim
-        jupyter-client
-        ipython
+        # jupyter-client  # Commented out due to matplotlib dependency
+        # ipython  # Commented out due to matplotlib dependency
         numpy
         pandas
-        matplotlib
+        # matplotlib  # Commented out due to tkinter build issues
       ];
   };
 
@@ -75,13 +75,5 @@
   xdg.configFile."nvim" = {
     source = inputs.kickstart-nvim;
     recursive = true;
-  };
-
-  # Or if you want to manage it locally in the dotfiles repo:
-  # xdg.configFile."nvim".source = ../config/nvim;
-
-  # Environment for neovim
-  home.sessionVariables = {
-    NVIM_LISTEN_ADDRESS = "/tmp/nvimsocket";
   };
 }

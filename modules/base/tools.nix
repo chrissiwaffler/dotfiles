@@ -45,16 +45,16 @@
 
     # Python ML packages (better managed via shell.nix per project)
     # but these are useful globally
-    python311Packages.ipython
+    # python311Packages.ipython  # Commented out due to matplotlib dependency
     # Temporarily disabled due to build issues
     # python311Packages.jupyter
     # python311Packages.notebook
     # python311Packages.jupyterlab
-    python311Packages.numpy
-    python311Packages.pandas
-    python311Packages.matplotlib
-    python311Packages.seaborn
-    python311Packages.scikit-learn
+    # python311Packages.numpy
+    # python311Packages.pandas
+    # python311Packages.matplotlib
+    # python311Packages.seaborn
+    # python311Packages.scikit-learn
 
     # Data tools
     jq # JSON processor
@@ -64,6 +64,7 @@
     # Container tools
     docker
     docker-compose
+    docker-buildx
     podman
     buildah
     skopeo
@@ -138,6 +139,10 @@
     # Fun stuff for screenshots
     silicon # Code screenshots
     pastel # Color manipulation
+
+    powertop
+    lm_sensors
+    linuxPackages.turbostat
   ];
 
   # Language-specific configurations
