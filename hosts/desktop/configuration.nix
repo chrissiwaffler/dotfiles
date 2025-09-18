@@ -20,6 +20,9 @@
     # ../../modules/desktop/lmstudio.nix
   ];
 
+  # Enable Docker service
+  virtualisation.docker.enable = true;
+
   # Boot loader
   boot.loader = {
     systemd-boot.enable = true;
