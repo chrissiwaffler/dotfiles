@@ -1,6 +1,7 @@
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+You do not have sudo access, so for example you cannot run `sudo nixos rebuild --switch`. I have to run this command.
 
 ## Repository Overview
 
@@ -60,7 +61,7 @@ nix-instantiate --parse modules/desktop/hyprland.nix
 ### Flake Structure
 
 - Defines home configurations for `chrissi@linux` and `chrissi@darwin`
-- Uses nixpkgs-unstable channel
+- Uses nixpkgs-25.05 channel
 - Includes overlays for neovim-nightly
 
 ## Important Implementation Details
@@ -105,4 +106,3 @@ When adding new packages:
 - Development tools go in `modules/base/tools.nix`
 - Shell-specific tools and aliases go in `modules/base/shell.nix`
 - Editor plugins and LSP servers go in `modules/base/neovim.nix`
-
