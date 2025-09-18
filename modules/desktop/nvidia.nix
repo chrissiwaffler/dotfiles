@@ -11,27 +11,26 @@
   boot.blacklistedKernelModules = ["amdgpu" "radeon"];
 
   hardware.nvidia = {
-    # Use the latest production driver
-    # RTX 5090 requires the latest drivers
-    package = config.boot.kernelPackages.nvidiaPackages.production;
+    # RTX 5090 with Blackwell architecture - use beta driver for latest support
+    package = config.boot.kernelPackages.nvidiaPackages.beta;
 
     # Modesetting is required for Wayland
     modesetting.enable = true;
 
-    # Power management (important for laptops, optional for desktops)
-    powerManagement.enable = true;
+    # Power management - disable for immediate GPU access
+    powerManagement.enable = false;
 
     # Enable the NVIDIA settings menu
     nvidiaSettings = true;
 
-    # Use the open kernel module (recommended for newer GPUs like RTX 5090)
-    # This provides better Wayland support
-    open = true;
+# Use proprietary drivers for RTX 5090 (open source has NvKmsKapiDevice issues)
+  # RTX 5090 Blackwell has issues with open source drivers
+  open = false;
 
     # Enable Dynamic Boost (if supported)
     dynamicBoost.enable = false; # Set to true if you want dynamic boost
 
-    # Fine-grained power management
+    # Fine-grained power management (disabled for desktop systems)
     powerManagement.finegrained = false;
   };
 
@@ -58,21 +57,29 @@
   boot.kernelParams = [
     # Enable DRM kernel mode setting
     "nvidia-drm.modeset=1"
-
-    # Enable framebuffer console
-    "nvidia-drm.fbdev=1"
-
-    # Disable GSP firmware (can help with some issues)
-    # Uncomment if you experience problems
-    # "nvidia.NVreg_EnableGpuFirmware=0"
+    # Disable GSP firmware for RTX 5090 (proprietary driver compatibility)
+    "nvidia.NVreg_EnableGpuFirmware=0"
+    # Force PCIe mode
+    "pcie_port_pm=off"
+    # Disable ACPI for GPU
+    "acpi_rev_override=1"
+    # Enable MSI
+    "nvidia.NVreg_EnableMSI=1"
+    # Enable UEFI mode
+    "nvidia.NVreg_RegistryDwords=EnableBrightnessControl=1"
   ];
 
-  # Early KMS for NVIDIA
+  # Early KMS for NVIDIA - ensure modules are loaded at boot
   boot.initrd.kernelModules = [
     "nvidia"
     "nvidia_modeset"
     "nvidia_uvm"
     "nvidia_drm"
+  ];
+
+  # Ensure NVIDIA modules are available
+  boot.extraModulePackages = [
+    config.boot.kernelPackages.nvidia_x11
   ];
 
   # Environment variables for NVIDIA + Wayland
@@ -161,6 +168,19 @@
     "L+ /sbin/ldconfig - - - - /etc/ldconfig-wrapper"
   ];
 
+  # Enable NVIDIA persistence daemon for headless GPU access
+  systemd.services.nvidia-persistenced = {
+    description = "NVIDIA Persistence Daemon";
+    wantedBy = ["multi-user.target"];
+    after = ["syslog.target"];
+    serviceConfig = {
+      Type = "forking";
+      ExecStart = "${config.boot.kernelPackages.nvidiaPackages.stable.bin}/bin/nvidia-persistenced --verbose";
+      ExecStopPost = "${config.boot.kernelPackages.nvidiaPackages.stable.bin}/bin/nvidia-smi -pm 0 || true";
+      Restart = "always";
+    };
+  };
+
   environment.variables = {
     C_INCLUDE_PATH = "${pkgs.python311}/include/python3.11";
     CPLUS_INCLUDE_PATH = "${pkgs.python311}/include/python3.11";
@@ -176,6 +196,12 @@
     vulkan-tools
     wayland-utils
 
+    # NVIDIA tools for headless access
+    config.boot.kernelPackages.nvidiaPackages.stable
+
+    # Firmware for RTX 5090
+    linux-firmware
+
     # AI development essentials
     python311
     gcc
@@ -185,6 +211,7 @@
 
     # CUDA development tools
     cudaPackages.cudatoolkit
-    gcc
+    cudaPackages.cudnn
+    cudaPackages.nccl
   ];
 }
