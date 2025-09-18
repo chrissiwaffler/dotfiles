@@ -178,7 +178,6 @@
 
     # AI development essentials
     python311
-    python311Packages.tkinter
     gcc
     pkg-config
     uv
