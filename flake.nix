@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -30,6 +30,14 @@
     lib = nixpkgs.lib;
     systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
     forAllSystems = nixpkgs.lib.genAttrs systems;
+    stateVersion = "25.05";
+
+    # Import the opencode package
+    opencode = forAllSystems (
+      system: let
+        pkgs = nixpkgs.legacyPackages.${system};
+      in (import ./pkgs/opencode.nix {inherit pkgs;})
+    );
   in {
     nixosModules = {
       home-manager = home-manager.nixosModules.home-manager;
@@ -50,7 +58,10 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              extraSpecialArgs = {inherit inputs;};
+              extraSpecialArgs = {
+                inherit inputs;
+                inherit stateVersion;
+              };
               users.chrissi = import ./profiles/desktop.nix;
               # Backup existing files instead of failing
               backupFileExtension = "backup";
@@ -69,11 +80,13 @@
           {
             home.username = "chrissi";
             home.homeDirectory = "/home/chrissi";
-            home.stateVersion = "24.05";
-            nixpkgs.config.allowUnfree = true;
+            home.stateVersion = stateVersion;
           }
         ];
-        extraSpecialArgs = {inherit inputs;};
+        extraSpecialArgs = {
+          inherit inputs;
+          inherit stateVersion;
+        };
       };
 
       "chrissi@darwin" = home-manager.lib.homeManagerConfiguration {
@@ -83,10 +96,13 @@
           {
             home.username = "chrissi";
             home.homeDirectory = "/Users/chrissi";
-            home.stateVersion = "24.05";
+            home.stateVersion = stateVersion;
           }
         ];
-        extraSpecialArgs = {inherit inputs;};
+        extraSpecialArgs = {
+          inherit inputs;
+          inherit stateVersion;
+        };
       };
 
       # Simple base configuration for any user
@@ -114,6 +130,11 @@
         extraSpecialArgs = {inherit inputs;};
       };
     };
+
+    # Custom packages
+    packages = forAllSystems (system: {
+      opencode = opencode.${system};
+    });
 
     # dev shell for working on these configs
     devShells = forAllSystems (
