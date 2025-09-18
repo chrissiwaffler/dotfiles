@@ -174,8 +174,8 @@
     after = ["syslog.target"];
     serviceConfig = {
       Type = "forking";
-      ExecStart = "${config.boot.kernelPackages.nvidiaPackages.stable.bin}/bin/nvidia-persistenced --verbose";
-      ExecStopPost = "${config.boot.kernelPackages.nvidiaPackages.stable.bin}/bin/nvidia-smi -pm 0 || true";
+      ExecStart = "${config.boot.kernelPackages.nvidiaPackages.latest.bin}/bin/nvidia-persistenced --verbose";
+      ExecStopPost = "${config.boot.kernelPackages.nvidiaPackages.latest.bin}/bin/nvidia-smi -pm 0 || true";
       Restart = "always";
     };
   };
