@@ -1,4 +1,3 @@
-# modules/desktop/tools.nix
 {
   config,
   lib,
