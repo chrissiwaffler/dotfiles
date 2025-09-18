@@ -11,8 +11,8 @@
   boot.blacklistedKernelModules = ["amdgpu" "radeon"];
 
   hardware.nvidia = {
-    # RTX 5090 with Blackwell architecture - use beta driver for latest support
-    package = config.boot.kernelPackages.nvidiaPackages.beta;
+    # RTX 5090 with Blackwell architecture
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
 
     # Modesetting is required for Wayland
     modesetting.enable = true;
@@ -23,9 +23,9 @@
     # Enable the NVIDIA settings menu
     nvidiaSettings = true;
 
-# Use proprietary drivers for RTX 5090 (open source has NvKmsKapiDevice issues)
-  # RTX 5090 Blackwell has issues with open source drivers
-  open = false;
+    # Use proprietary drivers for RTX 5090 (open source has NvKmsKapiDevice issues)
+    # RTX 5090 Blackwell has issues with open source drivers
+    open = false;
 
     # Enable Dynamic Boost (if supported)
     dynamicBoost.enable = false; # Set to true if you want dynamic boost
