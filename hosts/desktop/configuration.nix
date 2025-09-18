@@ -151,6 +151,7 @@
     pavucontrol
     brightnessctl
     playerctl
+    pciutils
   ];
 
   # Power management
