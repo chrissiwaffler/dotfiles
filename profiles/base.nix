@@ -122,8 +122,6 @@
     ];
   };
 
-  
-
   # XDG base directories
   xdg = {
     enable = true;
