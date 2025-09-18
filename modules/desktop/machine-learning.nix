@@ -3,53 +3,14 @@
   lib,
   pkgs,
   ...
-}: let
-  # Python environment with ML packages
-  pythonML = pkgs.python311.withPackages (ps: with ps; [
-    # Core ML frameworks
-    torch
-    torchvision
-    torchaudio
-    tensorflow
-    
-    # Scientific computing
-    numpy
-    scipy
-    pandas
-    scikit-learn
-    
-    # Deep learning utilities
-    transformers
-    datasets
-    accelerate
-    
-    # Visualization
-    matplotlib
-    seaborn
-    plotly
-    
-    # Jupyter and development
-    jupyter
-    jupyterlab
-    ipython
-    
-    # Other ML tools
-    opencv4
-    pillow
-    h5py
-    tensorboard
-  ]);
-in {
+}: {
   # Machine Learning Development Environment
   
   environment.systemPackages = with pkgs; [
-    # Python ML environment
-    pythonML
-    
-    # CUDA and GPU libraries
-    cudatoolkit
-    cudnn
-    nccl
+    # Container support for ML workflows
+    docker
+    docker-compose
+    docker-buildx
     
     # Development tools
     gcc
@@ -62,26 +23,16 @@ in {
     
     # Performance monitoring
     btop
-    nvtop
-    
-    # Container support for ML workflows
-    docker
-    nvidia-docker
-    
-    # Additional ML tools
-    onnx
-    onnxruntime
-    
-    # Model serving
-    # tritonserver  # Uncomment if needed
   ];
   
   # Docker configuration for ML containers
   virtualisation.docker = {
     enable = true;
     enableOnBoot = true;
-    enableNvidia = true;  # Enable NVIDIA GPU support in Docker
   };
+  
+  # NVIDIA container toolkit for GPU support
+  hardware.nvidia-container-toolkit.enable = true;
   
   # Create ML development shell script
   environment.etc."ml-shell.nix" = {
@@ -101,7 +52,7 @@ in {
             numpy
             pandas
             jupyter
-            matplotlib
+            # matplotlib  # Commented out due to tkinter build issues
           ]))
           
           # Development tools
@@ -177,9 +128,6 @@ in {
   
   # Aliases for common ML tasks
   programs.bash.shellAliases = {
-    ml-shell = "nix-shell /etc/ml-shell.nix";
-    jupyter-lab = "${pythonML}/bin/jupyter lab";
-    tensorboard = "${pythonML}/bin/tensorboard";
     gpu-status = "nvidia-smi";
     gpu-watch = "watch -n 1 nvidia-smi";
   };
