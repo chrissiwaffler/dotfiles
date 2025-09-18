@@ -12,7 +12,7 @@
 
   hardware.nvidia = {
     # RTX 5090 with Blackwell architecture
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    package = config.boot.kernelPackages.nvidiaPackages.latest;
 
     # Modesetting is required for Wayland
     modesetting.enable = true;
@@ -25,7 +25,7 @@
 
     # Use proprietary drivers for RTX 5090 (open source has NvKmsKapiDevice issues)
     # RTX 5090 Blackwell has issues with open source drivers
-    open = false;
+    open = true;
 
     # Enable Dynamic Boost (if supported)
     dynamicBoost.enable = false; # Set to true if you want dynamic boost
@@ -57,8 +57,6 @@
   boot.kernelParams = [
     # Enable DRM kernel mode setting
     "nvidia-drm.modeset=1"
-    # Disable GSP firmware for RTX 5090 (proprietary driver compatibility)
-    "nvidia.NVreg_EnableGpuFirmware=0"
     # Force PCIe mode
     "pcie_port_pm=off"
     # Disable ACPI for GPU
@@ -79,7 +77,8 @@
 
   # Ensure NVIDIA modules are available
   boot.extraModulePackages = [
-    config.boot.kernelPackages.nvidia_x11
+    # Explizit den open path nehmen
+    config.boot.kernelPackages.nvidia_x11_latest_open
   ];
 
   # Environment variables for NVIDIA + Wayland
