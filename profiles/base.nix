@@ -119,6 +119,9 @@
       zlib.dev
       openssl.dev
       libffi.dev
+
+      # AI coding assistant
+      inputs.self.packages.${pkgs.system}.opencode
     ];
   };
 
