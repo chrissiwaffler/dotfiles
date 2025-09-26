@@ -73,17 +73,20 @@
       mv = "mv -i";
     };
 
-    initContent = ''
-      # Better key bindings
-      bindkey '^[[A' history-substring-search-up
-      bindkey '^[[B' history-substring-search-down
-      bindkey '^[[1;5C' forward-word
-      bindkey '^[[1;5D' backward-word
+     initContent = ''
+       # Add OpenMPI to LD_LIBRARY_PATH if available
+       ${lib.optionalString (pkgs ? openmpi) ''export LD_LIBRARY_PATH="${pkgs.openmpi}/lib:$LD_LIBRARY_PATH"''}
 
-      # FZF configuration
-      export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
-      export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-      export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+       # Better key bindings
+       bindkey '^[[A' history-substring-search-up
+       bindkey '^[[B' history-substring-search-down
+       bindkey '^[[1;5C' forward-word
+       bindkey '^[[1;5D' backward-word
+
+       # FZF configuration
+       export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+       export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+       export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 
       # Auto-cd into directory by typing its name
       setopt autocd

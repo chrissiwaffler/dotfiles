@@ -20,6 +20,7 @@
     ninja
     meson
     pkg-config
+    openmpi
 
     # Compilers & interpreters
     gcc

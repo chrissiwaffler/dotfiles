@@ -155,7 +155,11 @@
     brightnessctl
     playerctl
     pciutils
+    openmpi
   ];
+
+  # Add OpenMPI to system-wide environment
+  environment.profileRelativeEnvVars.LD_LIBRARY_PATH = ["${pkgs.openmpi}/lib"];
 
   # Power management
   services.power-profiles-daemon.enable = false;
