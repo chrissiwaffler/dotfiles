@@ -17,7 +17,6 @@ This directory contains the NixOS configuration for the desktop system.
    ```
 
 3. Review and adjust `configuration.nix`:
-
    - Update timezone in `time.timeZone`
    - Adjust locale settings if needed
    - Modify user settings as required
@@ -32,8 +31,3 @@ This directory contains the NixOS configuration for the desktop system.
 - `configuration.nix` - Main system configuration (tracked in git)
 - `hardware-configuration.nix` - Hardware-specific configuration (gitignored)
 - `README.md` - This file
-
-## Notes
-
-The `hardware-configuration.nix` file is gitignored because it contains machine-specific details like disk UUIDs and partition layouts that are unique to each system.
-

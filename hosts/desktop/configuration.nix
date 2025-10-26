@@ -65,8 +65,7 @@
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
-    # Use the withUWSM option for newer NixOS versions (25.05+)
-    # withUWSM = true;  # Uncomment for NixOS 25.05+
+    withUWSM = true;
   };
 
   # Ensure XDG portal for Wayland

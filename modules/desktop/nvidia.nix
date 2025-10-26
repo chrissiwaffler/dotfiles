@@ -135,6 +135,7 @@
     enable = true;
     libraries = with pkgs; [
       stdenv.cc.cc.lib
+      gcc15.cc.lib
       glibc
       cudaPackages.cudatoolkit
       cudaPackages.cudnn
