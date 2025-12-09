@@ -43,6 +43,11 @@
       home-manager = home-manager.nixosModules.home-manager;
     };
 
+    homeManagerModules = {
+      base = import ./profiles/base.nix;
+      desktop = import ./profiles/desktop.nix;
+    };
+
     # NixOS configurations
     nixosConfigurations = {
       desktop = nixpkgs.lib.nixosSystem {
