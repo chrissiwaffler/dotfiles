@@ -1,5 +1,7 @@
 # personal dotfiles
 
+TODO: create simple base config without CUDA!!!
+
 ```bash
 nix flake check --all-systems
 ```
