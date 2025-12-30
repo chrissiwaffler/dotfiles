@@ -73,7 +73,7 @@
       mv = "mv -i";
     };
 
-     initContent = ''
+    initContent = ''
        # Add OpenMPI to LD_LIBRARY_PATH if available
        ${lib.optionalString (pkgs ? openmpi) ''export LD_LIBRARY_PATH="${pkgs.openmpi}/lib:$LD_LIBRARY_PATH"''}
 

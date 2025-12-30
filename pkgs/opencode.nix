@@ -4,14 +4,14 @@
   # https://github.com/sst/opencode/releases
   # Then update both the version and the src hash below
   # Use: nix-prefetch-url --unpack --type sha256 "https://github.com/sst/opencode/archive/refs/tags/v<version>.tar.gz"
-  version = "0.11.3";
+  version = "1.0.209";
 
   # Fetch the source from GitHub
   src = pkgs.fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${version}";
-    hash = "sha256:1crkiajg4ybvcv7jnhcq5n3pd7kybjxv7qvdh925lay2l6hbm0bf";
+    hash = "sha256:0ky5rxp0rhh898kkw527vcc69rhwalv068zh3nxv3ci7ynx88np1";
   };
 
   # Build the TUI component with Go
