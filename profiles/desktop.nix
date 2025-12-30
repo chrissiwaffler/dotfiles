@@ -8,7 +8,6 @@
   imports = [
     ./base.nix
     ../modules/desktop/hyprland.nix
-    ../modules/desktop/tools.nix
     ../modules/desktop/config.nix
   ];
 
@@ -58,7 +57,7 @@
     dbeaver-bin
 
     # AI coding assistant
-    inputs.self.packages.${pkgs.system}.opencode
+    inputs.opencode.packages.${pkgs.system}.default
 
     # System tools
     gnome-disk-utility

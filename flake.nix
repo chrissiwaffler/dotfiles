@@ -14,7 +14,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # personal neovim config
+    opencode = {
+      url = "github:sst/opencode";
+    };
+
     kickstart-nvim = {
       url = "github:chrissiwaffler/kickstart.nvim/master";
       flake = false;
@@ -25,19 +28,13 @@
     self,
     nixpkgs,
     home-manager,
+    opencode,
     ...
   } @ inputs: let
     lib = nixpkgs.lib;
     systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
     forAllSystems = nixpkgs.lib.genAttrs systems;
     stateVersion = "25.05";
-
-    # Import the opencode package
-    opencode = forAllSystems (
-      system: let
-        pkgs = nixpkgs.legacyPackages.${system};
-      in (import ./pkgs/opencode.nix {inherit pkgs;})
-    );
   in {
     nixosModules = {
       home-manager = home-manager.nixosModules.home-manager;
@@ -135,11 +132,6 @@
         extraSpecialArgs = {inherit inputs;};
       };
     };
-
-    # Custom packages
-    packages = forAllSystems (system: {
-      opencode = opencode.${system};
-    });
 
     # dev shell for working on these configs
     devShells = forAllSystems (
