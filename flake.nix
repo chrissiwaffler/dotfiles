@@ -31,12 +31,12 @@
     opencode,
     ...
   } @ inputs: let
-    inherit inputs;
     lib = nixpkgs.lib;
     systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
     forAllSystems = nixpkgs.lib.genAttrs systems;
     stateVersion = "25.05";
   in {
+    inherit inputs;
     nixosModules = {
       home-manager = home-manager.nixosModules.home-manager;
     };
