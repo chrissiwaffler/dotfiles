@@ -10,12 +10,12 @@
     };
 
     neovim-nightly-overlay = {
-      url = "github:nix-community/neovim-nightly-overlay/b5885a33eb2525154ddfdf2675975db29e6416ac";
+      url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     opencode = {
-      url = "github:sst/opencode";
+      url = "github:anomalyco/opencode";
     };
 
     kickstart-nvim = {

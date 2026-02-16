@@ -30,8 +30,8 @@
     timeout = 3;
   };
 
-  # need to use the latest version for my relatively new hardware
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # Use kernel 6.18 - 6.19 breaks NVIDIA open drivers (tracked in nixpkgs #489947)
+  boot.kernelPackages = pkgs.linuxPackages_6_18;
 
   # Networking
   networking = {

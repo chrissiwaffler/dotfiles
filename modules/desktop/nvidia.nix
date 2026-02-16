@@ -42,13 +42,13 @@
     # Extra packages for NVIDIA
     extraPackages = with pkgs; [
       nvidia-vaapi-driver # VA-API implementation
-      vaapiVdpau
+      libva-vdpau-driver
       libvdpau-va-gl
     ];
 
     extraPackages32 = with pkgs.pkgsi686Linux; [
       nvidia-vaapi-driver
-      vaapiVdpau
+      libva-vdpau-driver
       libvdpau-va-gl
     ];
   };
@@ -168,18 +168,7 @@
     "L+ /sbin/ldconfig - - - - /etc/ldconfig-wrapper"
   ];
 
-  # Enable NVIDIA persistence daemon for headless GPU access
-  systemd.services.nvidia-persistenced = {
-    description = "NVIDIA Persistence Daemon";
-    wantedBy = ["multi-user.target"];
-    after = ["syslog.target"];
-    serviceConfig = {
-      Type = "forking";
-      ExecStart = "${config.boot.kernelPackages.nvidiaPackages.latest.bin}/bin/nvidia-persistenced --verbose";
-      ExecStopPost = "${config.boot.kernelPackages.nvidiaPackages.latest.bin}/bin/nvidia-smi -pm 0 || true";
-      Restart = "always";
-    };
-  };
+
 
   environment.variables = {
     C_INCLUDE_PATH = "${pkgs.python311}/include/python3.11";
@@ -192,7 +181,7 @@
     nvidia-vaapi-driver
     egl-wayland
     libva-utils
-    glxinfo
+    mesa-demos
     vulkan-tools
     wayland-utils
 

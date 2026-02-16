@@ -56,9 +56,6 @@
     insomnia
     dbeaver-bin
 
-    # AI coding assistant
-    inputs.opencode.packages.${pkgs.system}.default
-
     # System tools
     gnome-disk-utility
     seahorse
@@ -69,7 +66,7 @@
     nerd-fonts.hack
     font-awesome
     noto-fonts
-    noto-fonts-emoji
+    noto-fonts-color-emoji
     liberation_ttf
 
     openrgb

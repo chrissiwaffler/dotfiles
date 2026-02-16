@@ -72,7 +72,7 @@
       httpie
       mtr
       nmap
-      dogdns
+      doggo
 
       # Fun stuff
       neofetch
@@ -120,7 +120,7 @@
       openssl.dev
       libffi.dev
 
-      # AI coding assistant
+      # AI coding assistant from flake input (update with: nix flake update opencode)
       inputs.opencode.packages.${pkgs.system}.default
     ];
   };
