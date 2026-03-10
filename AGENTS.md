@@ -1,7 +1,7 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-You do not have sudo access, so for example you cannot run `sudo nixos rebuild --switch`. I have to run this command.
+This file provides guidance to AI agents working with code in this repository.
+You do not have sudo access, so for example you cannot run `sudo nixos rebuild --switch`. The user has to run this command.
 
 ## Repository Overview
 
