@@ -1,9 +1,14 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["oh-my-opencode@latest"],
+  "plugin": ["oh-my-openagent@latest"],
   "theme": "monokai",
   // using z.ai glm 4.5 via their pro coding plan ($15)
   "provider": {
+    "amazon-bedrock": {
+      "options": {
+        "region": "eu-central-1",
+      },
+    },
     "zai": {
       "options": {
         "baseURL": "https://api.z.ai/api/coding/paas/v4",
