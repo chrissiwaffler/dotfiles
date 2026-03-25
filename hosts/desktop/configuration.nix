@@ -12,6 +12,8 @@
     ../../modules/desktop/nvidia.nix
     # Tailscale VPN for remote access
     ../../modules/desktop/tailscale.nix
+    # OpenCode persistent server for remote access
+    ../../modules/services/opencode-server.nix
     # sops-nix for secrets management
     inputs.sops-nix.nixosModules.sops
     # Machine learning environment with Docker
@@ -24,6 +26,20 @@
 
   # Configure sops-nix to use system SSH host key for decryption
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  
+  # System-level secrets (accessible to system services)
+  sops.defaultSopsFile = ../../hosts/desktop/secrets.yaml;
+  sops.secrets.AWS_BEARER_TOKEN_BEDROCK = {};
+  
+  # Create environment file for opencode-server with secrets
+  sops.templates."opencode-env" = {
+    content = ''
+      AWS_BEARER_TOKEN_BEDROCK=${config.sops.placeholder.AWS_BEARER_TOKEN_BEDROCK}
+    '';
+    path = "/run/secrets-rendered/opencode-env";
+    mode = "0440";
+    owner = "chrissi";
+  };
 
   # Enable Docker service
   virtualisation.docker.enable = true;
@@ -225,6 +241,18 @@
   # Disable Python documentation builds to avoid sphinx/docutils bug
   # See: https://github.com/NixOS/nixpkgs/issues/499166
   nixpkgs.config.python.enableDocs = false;
+
+  # OpenCode server for remote access via Tailscale
+  services.opencode-server = {
+    enable = true;
+    port = 4096;
+    hostname = "0.0.0.0"; # Listen on all interfaces (Tailscale will provide security)
+    user = "chrissi";
+    workingDirectory = "/home/chrissi";
+    # Optional: Enable authentication
+    # enableAuth = true;
+    # passwordFile = "/run/secrets/opencode-password";
+  };
 
   # System state version
   system.stateVersion = "25.05";
