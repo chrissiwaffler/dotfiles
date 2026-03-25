@@ -122,8 +122,7 @@
       libffi.dev
 
       # AI coding assistant from flake input (update with: nix flake update opencode)
-      # Temporarily disabled due to sphinx-9.1.0 incompatibility with python3.11
-      # inputs.opencode.packages.${pkgs.system}.default
+      inputs.opencode.packages.${pkgs.system}.default
     ];
   };
 
