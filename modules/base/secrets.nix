@@ -27,9 +27,11 @@
     };
   };
 
-  # Export as environment variable (points to file path, not raw value)
-  # Programs should read the file: cat $AWS_BEARER_TOKEN_BEDROCK
-  home.sessionVariables = {
-    AWS_BEARER_TOKEN_BEDROCK = "${config.sops.secrets.AWS_BEARER_TOKEN_BEDROCK.path}";
-  };
+  # Load token value directly into environment via shell init
+  programs.zsh.initExtra = lib.mkAfter ''
+    # Load AWS Bedrock token from sops-managed secret file
+    if [[ -f "${config.sops.secrets.AWS_BEARER_TOKEN_BEDROCK.path}" ]]; then
+      export AWS_BEARER_TOKEN_BEDROCK="$(cat "${config.sops.secrets.AWS_BEARER_TOKEN_BEDROCK.path}")"
+    fi
+  '';
 }
