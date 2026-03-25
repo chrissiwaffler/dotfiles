@@ -221,6 +221,10 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+  
+  # Disable Python documentation builds to avoid sphinx/docutils bug
+  # See: https://github.com/NixOS/nixpkgs/issues/499166
+  nixpkgs.config.python.enableDocs = false;
 
   # System state version
   system.stateVersion = "25.05";

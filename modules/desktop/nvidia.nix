@@ -192,7 +192,8 @@
     linux-firmware
 
     # AI development essentials
-    python311
+    # python311 - removed from system packages to avoid doc build issues (nixpkgs #499166)
+    # Available in home-manager (profiles/base.nix) instead
     gcc
     pkg-config
     uv
