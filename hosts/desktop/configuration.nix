@@ -12,6 +12,8 @@
     ../../modules/desktop/nvidia.nix
     # Tailscale VPN for remote access
     ../../modules/desktop/tailscale.nix
+    # sops-nix for secrets management
+    inputs.sops-nix.nixosModules.sops
     # Machine learning environment with Docker
     #../../modules/desktop/machine-learning.nix
     # RTX 5090 optimized AI configuration
@@ -19,6 +21,9 @@
     # Keep LM Studio for GUI option
     # ../../modules/desktop/lmstudio.nix
   ];
+
+  # Configure sops-nix to use system SSH host key for decryption
+  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
   # Enable Docker service
   virtualisation.docker.enable = true;

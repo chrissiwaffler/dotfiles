@@ -13,3 +13,11 @@ result-*
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# sops-nix secrets - exclude private keys, allow encrypted files
+**/keys.txt
+**/*.key.txt
+.config/sops/age/keys.txt
+!hosts/*/secrets.yaml
+
+.local

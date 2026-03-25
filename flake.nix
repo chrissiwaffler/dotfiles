@@ -22,6 +22,11 @@
       url = "github:chrissiwaffler/kickstart.nvim/master";
       flake = false;
     };
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -29,6 +34,7 @@
     nixpkgs,
     home-manager,
     opencode,
+    sops-nix,
     ...
   } @ inputs: let
     lib = nixpkgs.lib;
@@ -84,6 +90,7 @@
             home.username = "chrissi";
             home.homeDirectory = "/home/chrissi";
             home.stateVersion = stateVersion;
+            nixpkgs.config.allowUnfree = true;
           }
         ];
         extraSpecialArgs = {

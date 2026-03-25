@@ -1,0 +1,21 @@
+# sops-nix configuration
+# This file defines which age keys can decrypt which secrets
+
+keys:
+  # Personal key (user's age key for editing secrets)
+  # Generate with: age-keygen -o ~/.config/sops/age/keys.txt
+  # Or convert from SSH: ssh-to-age -private-key -i ~/.ssh/id_ed25519 -o ~/.config/sops/age/keys.txt
+  # Get public key with: age-keygen -y ~/.config/sops/age/keys.txt
+  - &admin age1x8775mjx938ax8whcygmh85tj53vrxv70wuwx2ce0hlem6qy0e4qqptt3m
+
+  # System SSH host key (for NixOS boot-time decryption)
+  # Get with: cat /etc/ssh/ssh_host_ed25519_key.pub | ssh-to-age
+  - &desktop age127rqyv3mhpyfhu9cvvk3c408rts36a8p0c6u4re3086ydw5tzffqjkc5np
+
+creation_rules:
+  # Desktop-specific secrets
+  - path_regex: hosts/desktop/secrets\.yaml$
+    key_groups:
+      - age:
+          - *admin
+          - *desktop

@@ -10,6 +10,7 @@
     ../modules/base/neovim.nix
     ../modules/base/shell.nix
     ../modules/base/tools.nix
+    ../modules/base/secrets.nix
   ];
 
   # let home-manager manage itself
@@ -75,7 +76,7 @@
       doggo
 
       # Fun stuff
-      neofetch
+      fastfetch
       figlet
       lolcat
       cowsay
@@ -83,7 +84,7 @@
 
       # Python ML essentials
       python311
-      python311Packages.pip
+      # python311Packages.pip  # Temporarily disabled - sphinx dependency incompatible
       uv
 
       # Container stuff
@@ -121,7 +122,8 @@
       libffi.dev
 
       # AI coding assistant from flake input (update with: nix flake update opencode)
-      inputs.opencode.packages.${pkgs.system}.default
+      # Temporarily disabled due to sphinx-9.1.0 incompatibility with python3.11
+      # inputs.opencode.packages.${pkgs.system}.default
     ];
   };
 
