@@ -11,6 +11,7 @@
     ../modules/base/shell.nix
     ../modules/base/tools.nix
     ../modules/base/secrets.nix
+    ../modules/base/git.nix
   ];
 
   # let home-manager manage itself

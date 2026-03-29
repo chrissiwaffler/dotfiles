@@ -50,6 +50,7 @@
     homeManagerModules = {
       base = import ./profiles/base.nix;
       desktop = import ./profiles/desktop.nix;
+      darwin-minimal = import ./profiles/darwin-minimal.nix;
     };
 
     # NixOS configurations
@@ -102,7 +103,7 @@
       "chrissi@darwin" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.aarch64-darwin;
         modules = [
-          ./profiles/base.nix
+          ./profiles/darwin-minimal.nix
           {
             home.username = "chrissi";
             home.homeDirectory = "/Users/chrissi";

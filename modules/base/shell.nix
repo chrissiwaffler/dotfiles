@@ -161,56 +161,6 @@
     };
   };
 
-  # Git
-  programs.git = {
-    enable = true;
-    userName = "chrissiwaffler";
-    userEmail = "waffler.christoph@gmail.com";
-
-    delta = {
-      enable = true;
-      options = {
-        navigate = true;
-        line-numbers = true;
-        syntax-theme = "Catppuccin-mocha";
-      };
-    };
-
-    aliases = {};
-
-    extraConfig = {
-      init.defaultBranch = "main";
-      push.autoSetupRemote = true;
-      pull.rebase = true;
-      fetch.prune = true;
-      diff.colorMoved = "default";
-      merge.conflictstyle = "diff3";
-
-      core = {
-        editor = "nvim";
-        autocrlf = "input";
-      };
-    };
-
-    ignores = [
-      ".DS_Store"
-      "*.swp"
-      "*.swo"
-      "*~"
-      ".idea"
-      ".vscode"
-      "node_modules"
-      "__pycache__"
-      "*.pyc"
-      ".pytest_cache"
-      ".mypy_cache"
-      ".ruff_cache"
-      "target/"
-      "result"
-      "result-*"
-    ];
-  };
-
   # Direnv for automatic environment loading
   programs.direnv = {
     enable = true;
