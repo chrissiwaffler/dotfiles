@@ -100,12 +100,14 @@ in {
 
         # Command
         ExecStart = let
-          args = [
-            "${inputs.opencode.packages.${pkgs.system}.default}/bin/opencode"
-            "serve"
-            "--port ${toString cfg.port}"
-            "--hostname ${cfg.hostname}"
-          ] ++ cfg.extraArgs;
+          args =
+            [
+              "${inputs.opencode.packages.${pkgs.system}.default}/bin/opencode"
+              "serve"
+              "--port ${toString cfg.port}"
+              "--hostname ${cfg.hostname}"
+            ]
+            ++ cfg.extraArgs;
         in "${lib.concatStringsSep " " args}";
       };
     };

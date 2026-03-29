@@ -168,8 +168,6 @@
     "L+ /sbin/ldconfig - - - - /etc/ldconfig-wrapper"
   ];
 
-
-
   environment.variables = {
     C_INCLUDE_PATH = "${pkgs.python311}/include/python3.11";
     CPLUS_INCLUDE_PATH = "${pkgs.python311}/include/python3.11";

@@ -25,12 +25,12 @@
   ];
 
   # Configure sops-nix to use system SSH host key for decryption
-  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-  
+  sops.age.sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];
+
   # System-level secrets (accessible to system services)
   sops.defaultSopsFile = ../../hosts/desktop/secrets.yaml;
   sops.secrets.AWS_BEARER_TOKEN_BEDROCK = {};
-  
+
   # Create environment file for opencode-server with secrets
   sops.templates."opencode-env" = {
     content = ''
@@ -237,7 +237,7 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-  
+
   # Disable Python documentation builds to avoid sphinx/docutils bug
   # See: https://github.com/NixOS/nixpkgs/issues/499166
   nixpkgs.config.python.enableDocs = false;
