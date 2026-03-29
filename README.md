@@ -21,6 +21,12 @@ cd ~/dotfiles
 stow --restow --target ~/.config config
 ```
 
+macos update the home-manager and its files:
+
+```zsh
+home-manager switch --flake .#chrissi@darwin
+```
+
 # Syncthing usage
 
 for syncing work between machines (e.g., also secrets) when git would be too much overhead
