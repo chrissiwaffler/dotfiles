@@ -8,10 +8,8 @@
   programs.neovim = {
     enable = true;
 
-    # Use nightly if you want bleeding edge
-    package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
-    # or just use stable:
-    # package = pkgs.neovim-unwrapped;
+    # Use stable from nixpkgs
+    package = pkgs.neovim-unwrapped;
 
     defaultEditor = true;
     viAlias = true;
