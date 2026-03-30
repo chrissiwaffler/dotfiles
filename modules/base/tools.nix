@@ -5,6 +5,9 @@
   ...
 }: {
   home.packages = with pkgs; [
+    # === AI/ML Development Tools ===
+    # Note: droid is installed via npm globally (see home.activation below)
+
     # === Development Tools ===
 
     # Version control
@@ -144,7 +147,23 @@
     powertop
     lm_sensors
     linuxPackages.turbostat
+
+    # Required for droid CLI (Factory AI)
+    bun
   ];
+
+  # Install droid CLI via npm globally (imperative for rapidly updating package)
+  # Uses explicit nodejs_22 npm with --prefix to avoid modifying .npmrc during activation
+  home.activation.installDroid = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    DROID_VERSION="0.89.1"
+    NPM_PREFIX="$HOME/.local/share/npm"
+    
+    # Check if droid needs installation/update (use full path since npm prefix may not be in PATH yet)
+    CURRENT_VERSION=$($NPM_PREFIX/bin/droid --version 2>/dev/null || echo "none")
+    if [ "$CURRENT_VERSION" != "$DROID_VERSION" ]; then
+      $DRY_RUN_CMD ${pkgs.nodejs_22}/bin/npm install --prefix "$NPM_PREFIX" -g "droid@$DROID_VERSION"
+    fi
+  '';
 
   # Language-specific configurations
 
