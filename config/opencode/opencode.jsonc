@@ -19,7 +19,7 @@
       },
       "models": {
         "fw-kimi-2.5-flatrate": {
-          "id": "fireworks-ai/accounts/fireworks/routers/kimi-k2p5-turbo",
+          "id": "accounts/fireworks/routers/kimi-k2p5-turbo",
           "name": "Kimi K2.5 TURBO flat rate",
         },
       },
