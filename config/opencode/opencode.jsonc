@@ -8,9 +8,9 @@
         "region": "eu-central-1",
       },
     },
-    "zai": {
+    "zai-coding-plan": {
       "options": {
-        "baseURL": "https://api.z.ai/api/coding/paas/v4",
+        "apiKey": "{env:ZAI_CODING_PLAN_API_KEY}",
       },
     },
     "fireworks-ai": {
