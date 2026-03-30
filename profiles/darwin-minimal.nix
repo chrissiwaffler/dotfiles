@@ -8,6 +8,7 @@
   imports = [
     ../modules/base/git.nix
     ../modules/base/neovim.nix
+    ../modules/base/opencode.nix
   ];
 
   programs.home-manager.enable = true;

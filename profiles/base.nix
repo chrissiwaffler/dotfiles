@@ -12,6 +12,7 @@
     ../modules/base/tools.nix
     ../modules/base/secrets.nix
     ../modules/base/git.nix
+    ../modules/base/opencode.nix
   ];
 
   # let home-manager manage itself
@@ -121,9 +122,6 @@
       zlib.dev
       openssl.dev
       libffi.dev
-
-      # AI coding assistant from flake input (update with: nix flake update opencode)
-      inputs.opencode.packages.${pkgs.system}.default
     ];
   };
 

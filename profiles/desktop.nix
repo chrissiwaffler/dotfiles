@@ -8,7 +8,7 @@
   imports = [
     ./base.nix
     ../modules/desktop/hyprland.nix
-    ../modules/desktop/config.nix
+
   ];
 
   # Enable desktop-specific services
