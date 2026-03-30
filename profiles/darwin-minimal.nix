@@ -7,6 +7,7 @@
 }: {
   imports = [
     ../modules/base/git.nix
+    ../modules/base/neovim.nix
   ];
 
   programs.home-manager.enable = true;
