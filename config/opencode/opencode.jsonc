@@ -18,9 +18,9 @@
         "apiKey": "{env:FIREWORKS_API_KEY}",
       },
       "models": {
-        "fw-kimi-2.5-flatrate": {
+        "k2.5-flatrate": {
           "id": "accounts/fireworks/routers/kimi-k2p5-turbo",
-          "name": "Kimi K2.5 TURBO flat rate",
+          "name": "K2.5 TURBO flat",
         },
       },
     },
