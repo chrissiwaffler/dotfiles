@@ -23,7 +23,7 @@
       "model": "zai-coding-plan/glm-4.7",
     },
     "multimodal-looker": {
-      "model": "openrouter/moonshotai/kimi-k2.5",
+      "model": "fireworks-ai/k2.5-flatrate",
     },
     "metis": {
       "model": "zai-coding-plan/glm-5.1",
