@@ -2,7 +2,6 @@
   "$schema": "https://opencode.ai/config.json",
   "plugin": ["oh-my-openagent@latest"],
   "theme": "monokai",
-  // using z.ai glm 4.5 via their pro coding plan ($15)
   "provider": {
     "amazon-bedrock": {
       "options": {
@@ -14,9 +13,15 @@
         "baseURL": "https://api.z.ai/api/coding/paas/v4",
       },
     },
-    "openrouter": {
+    "fireworks-ai": {
+      "options": {
+        "apiKey": "{env:FIREWORKS_API_KEY}",
+      },
       "models": {
-        "qwen/qwen3-coder:free": {},
+        "fw-kimi-2.5-flatrate": {
+          "id": "fireworks-ai/accounts/fireworks/routers/kimi-k2p5-turbo",
+          "name": "Kimi K2.5 TURBO flat rate",
+        },
       },
     },
   },
