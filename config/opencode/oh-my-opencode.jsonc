@@ -2,60 +2,63 @@
   "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
   "agents": {
     "sisyphus": {
-      "model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model": "zai-coding-plan/glm-5.1",
     },
     "hephaestus": {
-      "model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model": "zai-coding-plan/glm-5.1",
     },
     "prometheus": {
-      "model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model": "zai-coding-plan/glm-5.1",
     },
     "atlas": {
-      "model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model": "zai-coding-plan/glm-5.1",
     },
     "oracle": {
-      "model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model": "zai-coding-plan/glm-5.1",
     },
     "librarian": {
-      "model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model": "zai-coding-plan/glm-4.7",
     },
     "explore": {
-      "model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model": "zai-coding-plan/glm-4.7",
     },
     "multimodal-looker": {
-      "model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model": "openrouter/moonshotai/kimi-k2.5",
     },
     "metis": {
-      "model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model": "zai-coding-plan/glm-5.1",
     },
     "momus": {
-      "model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model": "zai-coding-plan/glm-5.1",
     },
   },
   "categories": {
     "visual-engineering": {
-      "model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model": "zai-coding-plan/glm-5.1",
     },
     "ultrabrain": {
-      "model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model": "zai-coding-plan/glm-5.1",
     },
     "deep": {
-      "model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model": "zai-coding-plan/glm-5.1",
     },
     "artistry": {
-      "model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model": "zai-coding-plan/glm-5.1",
     },
     "quick": {
-      "model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model": "zai-coding-plan/glm-5.1",
     },
     "unspecified-low": {
-      "model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model": "zai-coding-plan/glm-4.7",
     },
     "unspecified-high": {
-      "model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model": "zai-coding-plan/glm-5.1",
     },
     "writing": {
-      "model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model": "zai-coding-plan/glm-5.1",
     },
+  },
+  "background_task": {
+    "defaultConcurrency": 20,
   },
 }
