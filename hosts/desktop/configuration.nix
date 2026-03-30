@@ -28,7 +28,8 @@
   sops.age.sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];
 
   # System-level secrets (accessible to system services)
-  sops.defaultSopsFile = ../../hosts/desktop/secrets.yaml;
+  # Using the new unified secrets structure: secrets/hosts/<hostname>.yaml
+  sops.defaultSopsFile = ../../secrets/hosts/desktop.yaml;
   sops.secrets.AWS_BEARER_TOKEN_BEDROCK = {};
 
   # Create environment file for opencode-server with secrets

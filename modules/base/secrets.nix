@@ -9,29 +9,50 @@
     inputs.sops-nix.homeManagerModules.sops
   ];
 
-  sops = {
-    # Age key file location (user-specific)
-    age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+  options.secrets = {
+    apiKeysFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = ../../secrets/api-keys.yaml;
+      description = "Path to the API keys file. Set to null to disable loading API keys.";
+    };
 
-    # Default secrets file for desktop host
-    defaultSopsFile = ../../hosts/desktop/secrets.yaml;
-    defaultSopsFormat = "yaml";
-
-    # Validate at build time
-    validateSopsFiles = true;
-
-    # Define AWS bearer token secret
-    secrets.AWS_BEARER_TOKEN_BEDROCK = {
-      # Will be decrypted to: ${config.sops.secrets.AWS_BEARER_TOKEN_BEDROCK.path}
-      # Location: $XDG_RUNTIME_DIR/secrets.d/AWS_BEARER_TOKEN_BEDROCK
+    apiKeysEnable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Whether to automatically load all API keys from the api-keys file into environment variables";
     };
   };
 
-  # Load token value directly into environment via shell init
-  programs.zsh.initExtra = lib.mkAfter ''
-    # Load AWS Bedrock token from sops-managed secret file
-    if [[ -f "${config.sops.secrets.AWS_BEARER_TOKEN_BEDROCK.path}" ]]; then
-      export AWS_BEARER_TOKEN_BEDROCK="$(cat "${config.sops.secrets.AWS_BEARER_TOKEN_BEDROCK.path}")"
-    fi
-  '';
+  config = let
+    apiKeysFile = config.secrets.apiKeysFile;
+    apiKeysExists = apiKeysFile != null && builtins.pathExists apiKeysFile;
+  in
+    lib.mkIf (apiKeysExists && config.secrets.apiKeysEnable) {
+      home.packages = [pkgs.yq];
+
+      sops = {
+        age.keyFile = lib.mkDefault "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+        defaultSopsFormat = "yaml";
+        validateSopsFiles = true;
+
+        # Mount entire api-keys.yaml file as-is using empty key
+        secrets.api-keys = {
+          sopsFile = apiKeysFile;
+          key = "";  # Empty key = entire file mounted as-is
+        };
+      };
+
+      # Load all top-level keys from the YAML as environment variables
+      programs.zsh.initExtra = lib.mkAfter ''
+        # Load API keys from decrypted YAML file
+        if [[ -f "${config.sops.secrets.api-keys.path}" ]]; then
+          # Extract all top-level keys and export as UPPERCASE env vars
+          eval $(${pkgs.yq}/bin/yq -r '
+            to_entries | .[] |
+            select(.key != "sops") |
+            "export " + (.key | ascii_upcase) + "=" + (.value | @sh)
+          ' "${config.sops.secrets.api-keys.path}")
+        fi
+      '';
+    };
 }

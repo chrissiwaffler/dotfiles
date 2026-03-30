@@ -1,21 +1,32 @@
 # sops-nix configuration
 # This file defines which age keys can decrypt which secrets
+#
+# To add a new host:
+# 1. Add the host's age public key to 'keys' section
+# 2. Add a creation_rules entry for secrets/hosts/<hostname>.yaml
+#    with key_groups: [*admin, *<hostname>]
+#
+# Each host can decrypt its own secrets file + the common secrets file.
 
 keys:
-  # Personal key (user's age key for editing secrets)
-  # Generate with: age-keygen -o ~/.config/sops/age/keys.txt
-  # Or convert from SSH: ssh-to-age -private-key -i ~/.ssh/id_ed25519 -o ~/.config/sops/age/keys.txt
-  # Get public key with: age-keygen -y ~/.config/sops/age/keys.txt
+  # Personal admin key (can edit all secrets)
   - &admin age1x8775mjx938ax8whcygmh85tj53vrxv70wuwx2ce0hlem6qy0e4qqptt3m
 
-  # System SSH host key (for NixOS boot-time decryption)
-  # Get with: cat /etc/ssh/ssh_host_ed25519_key.pub | ssh-to-age
+  # Host-specific keys (for automatic decryption on each machine)
   - &desktop age127rqyv3mhpyfhu9cvvk3c408rts36a8p0c6u4re3086ydw5tzffqjkc5np
+  - &macbook age1g5k7y7zpke4qxctprx9emd69qkv7ayavn8869sjzfn68rc64lavq8lxjqt
 
 creation_rules:
-  # Desktop-specific secrets
-  - path_regex: hosts/desktop/secrets\.yaml$
+  # Per-host secrets - each host file is encrypted for: admin + that host
+  - path_regex: secrets/hosts/desktop\.yaml$
     key_groups:
-      - age:
-          - *admin
-          - *desktop
+      - age: [*admin, *desktop]
+
+  - path_regex: secrets/hosts/macbook\.yaml$
+    key_groups:
+      - age: [*admin, *macbook]
+
+  # Shared secrets - encrypted for admin + all hosts
+  - path_regex: secrets/api-keys\.yaml$
+    key_groups:
+      - age: [*admin, *desktop, *macbook]

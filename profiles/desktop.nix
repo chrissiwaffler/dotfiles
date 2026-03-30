@@ -11,6 +11,9 @@
 
   ];
 
+  # API keys automatically loaded from secrets/api-keys.yaml
+  # (enabled by default in secrets.nix module)
+
   # Enable desktop-specific services
   services = {
     # Enable GPG agent for desktop
