@@ -41,6 +41,18 @@
     systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
     forAllSystems = nixpkgs.lib.genAttrs systems;
     stateVersion = "25.05";
+
+    # Import custom overlays
+    overlays = [
+      (import ./overlays/uutils-darwin-fix.nix)
+    ];
+
+    # Helper to apply overlays to nixpkgs
+    pkgsFor = system:
+      import nixpkgs {
+        inherit system;
+        overlays = overlays;
+      };
   in {
     inherit inputs;
     nixosModules = {
@@ -84,7 +96,7 @@
     # standalone home-manager configurations (for non-NixOS systems)
     homeConfigurations = {
       "chrissi@linux" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        pkgs = pkgsFor "x86_64-linux";
         modules = [
           ./profiles/desktop.nix
           {
@@ -101,7 +113,7 @@
       };
 
       "chrissi@darwin" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+        pkgs = pkgsFor "aarch64-darwin";
         modules = [
           ./profiles/darwin-minimal.nix
           {
@@ -118,7 +130,7 @@
 
       # Simple base configuration for any user
       "base" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        pkgs = pkgsFor "x86_64-linux";
         modules = [
           ./profiles/base.nix
           {
