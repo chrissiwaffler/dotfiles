@@ -51,6 +51,9 @@
       la = "eza -a --icons --group-directories-first";
       lt = "eza --tree --icons";
 
+      # Apps
+      oc = "opencode";
+
       # Modern replacements
       cat = "bat";
       grep = "rg";
