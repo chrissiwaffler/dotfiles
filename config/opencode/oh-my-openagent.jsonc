@@ -23,7 +23,7 @@
       "model": "zai-coding-plan/glm-5-turbo",
     },
     "multimodal-looker": {
-      "model": "fireworks-ai/k2.5-flatrate",
+      "model": "zai-coding-plan/glm-4.6v",
     },
     "metis": {
       "model": "zai-coding-plan/glm-5.1",
@@ -34,7 +34,7 @@
   },
   "categories": {
     "visual-engineering": {
-      "model": "zai-coding-plan/glm-5v-turbo",
+      "model": "zai-coding-plan/glm-4.6v",
     },
     "ultrabrain": {
       "model": "zai-coding-plan/glm-5.1",
@@ -43,19 +43,19 @@
       "model": "zai-coding-plan/glm-5.1",
     },
     "artistry": {
-      "model": "zai-coding-plan/glm-5v-turbo",
+      "model": "fireworks-ai/k2.5-flatrate",
     },
     "quick": {
-      "model": "zai-coding-plan/glm-5.1",
+      "model": "zai-coding-plan/glm-5-turbo",
     },
     "unspecified-low": {
-      "model": "zai-coding-plan/glm-5-turbo",
+      "model": "zai-coding-plan/glm-5.1",
     },
     "unspecified-high": {
       "model": "zai-coding-plan/glm-5.1",
     },
     "writing": {
-      "model": "zai-coding-plan/glm-5.1",
+      "model": "zai-coding-plan/glm-5-turbo",
     },
   },
   "background_task": {

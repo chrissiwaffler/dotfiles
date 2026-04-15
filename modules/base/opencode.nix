@@ -7,7 +7,7 @@
 }: {
   xdg.configFile = {
     "opencode/opencode.jsonc".source = ../../config/opencode/opencode.jsonc;
-    "opencode/oh-my-opencode.jsonc".source = ../../config/opencode/oh-my-opencode.jsonc;
+    "opencode/oh-my-openagent.jsonc".source = ../../config/opencode/oh-my-openagent.jsonc;
   };
 
   home.packages = [

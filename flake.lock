@@ -45,18 +45,14 @@
     "kickstart-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1774880893,
-        "narHash": "sha256-LIN+/UleJ3evJIj/cF74qb6XXI7hoq29hHS6qPw4xTM=",
-        "owner": "chrissiwaffler",
-        "repo": "kickstart.nvim",
-        "rev": "bd20e040835f3892c5152e2b095e7a0a66e7b743",
-        "type": "github"
+        "lastModified": 1775328510,
+        "narHash": "sha256-3BxE44MgBEjArOz3XVTY94ksMejO83w6mezasFGrbeA=",
+        "path": "/Users/chrissi/repos/kickstart.nvim",
+        "type": "path"
       },
       "original": {
-        "owner": "chrissiwaffler",
-        "ref": "master",
-        "repo": "kickstart.nvim",
-        "type": "github"
+        "path": "/Users/chrissi/repos/kickstart.nvim",
+        "type": "path"
       }
     },
     "neovim-nightly-overlay": {
@@ -134,11 +130,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1774988647,
-        "narHash": "sha256-YwzBXST6dPYYc3hkug1iVCBK+MCZHfNXZxcpFIvq2qw=",
+        "lastModified": 1776224878,
+        "narHash": "sha256-WPs/iCl+2ZogmqAUkx0nhLPdtCz0QmGQLyygJIH9sZU=",
         "owner": "anomalyco",
         "repo": "opencode",
-        "rev": "d6d4446f46be982e83a6d37b97e203fedfb74ef1",
+        "rev": "1f279cd2c8719601c72eff071dd69c58cda93219",
         "type": "github"
       },
       "original": {
