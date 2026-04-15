@@ -19,8 +19,7 @@
     };
 
     kickstart-nvim = {
-      # url = "github:chrissiwaffler/kickstart.nvim/master";
-      url = "path:/Users/chrissi/repos/kickstart.nvim";
+      url = "github:chrissiwaffler/kickstart.nvim/master";
       flake = false;
     };
 
