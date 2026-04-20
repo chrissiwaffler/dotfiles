@@ -97,6 +97,22 @@
         "type": "github"
       }
     },
+    "nixos-management-skill": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1776578028,
+        "narHash": "sha256-ZlD0s7OgPOtMc255EcjSxQ8nEy0J6tfMPmxzVY1hIM0=",
+        "owner": "michalzubkowicz",
+        "repo": "nixos-management-skill",
+        "rev": "94f501070cd33404ca9d123a44a0d31c0439af85",
+        "type": "github"
+      },
+      "original": {
+        "owner": "michalzubkowicz",
+        "repo": "nixos-management-skill",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1774106199,
@@ -152,6 +168,7 @@
         "home-manager": "home-manager",
         "kickstart-nvim": "kickstart-nvim",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
+        "nixos-management-skill": "nixos-management-skill",
         "nixpkgs": "nixpkgs",
         "opencode": "opencode",
         "sops-nix": "sops-nix"

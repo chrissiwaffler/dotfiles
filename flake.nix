@@ -27,6 +27,11 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nixos-management-skill = {
+      url = "github:michalzubkowicz/nixos-management-skill";
+      flake = false;
+    };
   };
 
   outputs = {
