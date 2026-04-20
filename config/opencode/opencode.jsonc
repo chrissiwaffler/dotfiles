@@ -25,4 +25,10 @@
       },
     },
   },
+  "mcp": {
+    "nixos": {
+      "command": ["nix", "run", "github:utensils/mcp-nixos", "--"],
+      "type": "local",
+    },
+  },
 }
