@@ -1,7 +1,7 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "plugin": ["oh-my-openagent@latest"],
-  "model": "zai-coding-plan/glm-5.1",
+  "model": "crofai/kimi-k2.6-precision",
   "theme": "monokai",
   "provider": {
     "amazon-bedrock": {
@@ -22,6 +22,84 @@
         "k2.5-flatrate": {
           "id": "accounts/fireworks/routers/kimi-k2p5-turbo",
           "name": "K2.5 TURBO flat",
+        },
+      },
+    },
+    "crofai": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "CrofAI",
+      "options": {
+        "baseURL": "https://crof.ai/v1",
+        "apiKey": "{env:CROF_AI_API_KEY}",
+      },
+      "models": {
+        "deepseek-v4-pro": {
+          "name": "CrofAI: deepseek-v4-pro",
+          "limit": { "context": 1000000, "output": 131072 },
+        },
+        "deepseek-v4-pro-precision": {
+          "name": "CrofAI: deepseek-v4-pro-precision",
+          "limit": { "context": 1000000, "output": 131072 },
+        },
+        "deepseek-v4-flash": {
+          "name": "CrofAI: deepseek-v4-flash",
+          "limit": { "context": 1000000, "output": 131072 },
+        },
+        "deepseek-v3.2": {
+          "name": "CrofAI: deepseek-v3.2",
+          "limit": { "context": 163840, "output": 163840 },
+        },
+        "kimi-k2.6": {
+          "name": "CrofAI: kimi-k2.6",
+          "limit": { "context": 262144, "output": 262144 },
+        },
+        "kimi-k2.6-precision": {
+          "name": "CrofAI: kimi-k2.6-precision",
+          "limit": { "context": 262144, "output": 262144 },
+        },
+        "kimi-k2.5": {
+          "name": "CrofAI: kimi-k2.5",
+          "limit": { "context": 262144, "output": 262144 },
+        },
+        "kimi-k2.5-lightning": {
+          "name": "CrofAI: kimi-k2.5-lightning",
+          "limit": { "context": 131072, "output": 32768 },
+        },
+        "glm-5.1": {
+          "name": "CrofAI: glm-5.1",
+          "limit": { "context": 202752, "output": 202752 },
+        },
+        "glm-5.1-precision": {
+          "name": "CrofAI: glm-5.1-precision",
+          "limit": { "context": 202752, "output": 202752 },
+        },
+        "glm-5": {
+          "name": "CrofAI: glm-5",
+          "limit": { "context": 202752, "output": 202752 },
+        },
+        "glm-4.7": {
+          "name": "CrofAI: glm-4.7",
+          "limit": { "context": 202752, "output": 202752 },
+        },
+        "glm-4.7-flash": {
+          "name": "CrofAI: glm-4.7-flash",
+          "limit": { "context": 202752, "output": 131072 },
+        },
+        "greg": {
+          "name": "CrofAI: greg",
+          "limit": { "context": 200000, "output": 200000 },
+        },
+        "gemma-4-31b-it": {
+          "name": "CrofAI: gemma-4-31b-it",
+          "limit": { "context": 262144, "output": 262144 },
+        },
+        "minimax-m2.5": {
+          "name": "CrofAI: minimax-m2.5",
+          "limit": { "context": 204800, "output": 131072 },
+        },
+        "qwen3.5-397b-a17b": {
+          "name": "CrofAI: qwen3.5-397b-a17b",
+          "limit": { "context": 262144, "output": 262144 },
         },
       },
     },

@@ -2,60 +2,60 @@
   "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
   "agents": {
     "sisyphus": {
-      "model": "zai-coding-plan/glm-5.1",
+      "model": "crofai/kimi-k2.6-precision",
     },
     "hephaestus": {
-      "model": "zai-coding-plan/glm-5.1",
+      "model": "crofai/deepseek-v4-pro-precision",
     },
     "prometheus": {
-      "model": "zai-coding-plan/glm-5.1",
+      "model": "crofai/kimi-k2.6-precision",
     },
     "atlas": {
-      "model": "fireworks-ai/k2.5-flatrate",
+      "model": "crofai/deepseek-v4-flash",
     },
     "oracle": {
-      "model": "zai-coding-plan/glm-5.1",
+      "model": "crofai/deepseek-v4-pro-precision",
     },
     "librarian": {
-      "model": "zai-coding-plan/glm-5-turbo",
+      "model": "crofai/deepseek-v4-flash",
     },
     "explore": {
-      "model": "zai-coding-plan/glm-5-turbo",
+      "model": "crofai/kimi-k2.6",
     },
     "multimodal-looker": {
-      "model": "zai-coding-plan/glm-4.6v",
+      "model": "crofai/kimi-k2.6-precision",
     },
     "metis": {
-      "model": "zai-coding-plan/glm-5.1",
+      "model": "crofai/glm-5.1-precision",
     },
     "momus": {
-      "model": "zai-coding-plan/glm-5.1",
+      "model": "crofai/deepseek-v4-pro-precision",
     },
   },
   "categories": {
     "visual-engineering": {
-      "model": "zai-coding-plan/glm-4.6v",
+      "model": "crofai/kimi-k2.6-precision",
     },
     "ultrabrain": {
-      "model": "zai-coding-plan/glm-5.1",
+      "model": "crofai/deepseek-v4-pro-precision",
     },
     "deep": {
-      "model": "zai-coding-plan/glm-5.1",
+      "model": "crofai/deepseek-v4-pro-precision",
     },
     "artistry": {
-      "model": "fireworks-ai/k2.5-flatrate",
+      "model": "crofai/kimi-k2.6-precision",
     },
     "quick": {
-      "model": "zai-coding-plan/glm-5-turbo",
+      "model": "crofai/kimi-k2.5-lightning",
     },
     "unspecified-low": {
-      "model": "zai-coding-plan/glm-5.1",
+      "model": "crofai/deepseek-v4-flash",
     },
     "unspecified-high": {
-      "model": "zai-coding-plan/glm-5.1",
+      "model": "crofai/deepseek-v4-pro-precision",
     },
     "writing": {
-      "model": "zai-coding-plan/glm-5-turbo",
+      "model": "crofai/deepseek-v4-pro",
     },
   },
   "background_task": {
