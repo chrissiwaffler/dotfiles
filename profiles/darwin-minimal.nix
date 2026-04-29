@@ -26,6 +26,9 @@
       # Secret management tools
       ssh-to-age
       sops
+
+      # Nix language server
+      nixd
     ];
   };
 
