@@ -11,7 +11,7 @@
       "model": "crofai/kimi-k2.6-precision",
     },
     "atlas": {
-      "model": "crofai/deepseek-v4-flash",
+      "model": "crofai/glm-5.1",
     },
     "oracle": {
       "model": "crofai/deepseek-v4-pro-precision",
@@ -46,7 +46,7 @@
       "model": "crofai/kimi-k2.6-precision",
     },
     "quick": {
-      "model": "crofai/kimi-k2.5-lightning",
+      "model": "crofai/deepseek-v4-flash",
     },
     "unspecified-low": {
       "model": "crofai/deepseek-v4-flash",
