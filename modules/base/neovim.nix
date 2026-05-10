@@ -34,6 +34,7 @@
       alejandra
       black
       isort
+      biome
       prettierd
       rustfmt
       gofumpt
