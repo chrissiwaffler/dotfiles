@@ -3,15 +3,17 @@
   "agents": {
     "sisyphus": {
       "model": "crofai/kimi-k2.6-precision",
+      "prompt_append": "For bigger tasks, consult prometheus and atlas for planning. Make extensive use of subagents for parallelized exploration. Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet.",
     },
     "hephaestus": {
       "model": "crofai/deepseek-v4-pro-precision",
     },
     "prometheus": {
       "model": "crofai/kimi-k2.6-precision",
+      "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet.",
     },
     "atlas": {
-      "model": "crofai/glm-5.1",
+      "model": "crofai/deepseek-v4-pro-precision",
     },
     "oracle": {
       "model": "crofai/deepseek-v4-pro-precision",
@@ -27,9 +29,11 @@
     },
     "metis": {
       "model": "crofai/glm-5.1-precision",
+      "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet.",
     },
     "momus": {
       "model": "crofai/deepseek-v4-pro-precision",
+      "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet.",
     },
   },
   "categories": {
