@@ -21,8 +21,8 @@
       # LSP servers
       lua-language-server
       nil # nix LSP
-      nodePackages.typescript-language-server
-      nodePackages.vscode-langservers-extracted # html, css, json, eslint
+      typescript-language-server
+      vscode-langservers-extracted # html, css, json, eslint
       pyright
       # ruff-lsp
       rust-analyzer
