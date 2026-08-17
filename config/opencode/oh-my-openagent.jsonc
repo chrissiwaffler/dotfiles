@@ -2,67 +2,67 @@
   "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
   "agents": {
     "sisyphus": {
-      "model": "crofai/kimi-k2.7-code",
-      "prompt_append": "For bigger tasks, consult prometheus and atlas for planning. Make extensive use of subagents for parallelized exploration. Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet.",
+      "model": "litellm/high",
+      "prompt_append": "For bigger tasks, consult prometheus and atlas for planning. Make extensive use of subagents for parallelized exploration. Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet."
     },
     "hephaestus": {
-      "model": "crofai/deepseek-v4-pro-precision",
+      "model": "litellm/high"
     },
     "prometheus": {
-      "model": "crofai/kimi-k2.7-code",
-      "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet.",
+      "model": "litellm/high",
+      "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet."
     },
     "atlas": {
-      "model": "crofai/deepseek-v4-pro-precision",
+      "model": "litellm/high"
     },
     "oracle": {
-      "model": "crofai/deepseek-v4-pro-precision",
+      "model": "litellm/high"
     },
     "librarian": {
-      "model": "crofai/deepseek-v4-flash",
+      "model": "litellm/coding"
     },
     "explore": {
-      "model": "crofai/kimi-k2.6",
+      "model": "litellm/coding"
     },
     "multimodal-looker": {
-      "model": "crofai/kimi-k2.6-precision",
+      "model": "litellm/multimodal"
     },
     "metis": {
-      "model": "crofai/glm-5.2",
-      "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet.",
+      "model": "litellm/high",
+      "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet."
     },
     "momus": {
-      "model": "crofai/deepseek-v4-pro-precision",
-      "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet.",
-    },
+      "model": "litellm/high",
+      "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet."
+    }
   },
   "categories": {
     "visual-engineering": {
-      "model": "crofai/kimi-k2.6-precision",
+      "model": "litellm/high"
     },
     "ultrabrain": {
-      "model": "crofai/deepseek-v4-pro-precision",
+      "model": "litellm/high"
     },
     "deep": {
-      "model": "crofai/deepseek-v4-pro-precision",
+      "model": "litellm/high"
     },
     "artistry": {
-      "model": "crofai/kimi-k2.6-precision",
+      "model": "litellm/multimodal"
     },
     "quick": {
-      "model": "crofai/deepseek-v4-flash",
+      "model": "litellm/coding"
     },
     "unspecified-low": {
-      "model": "crofai/deepseek-v4-flash",
+      "model": "litellm/cheap"
     },
     "unspecified-high": {
-      "model": "crofai/deepseek-v4-pro-precision",
+      "model": "litellm/high"
     },
     "writing": {
-      "model": "crofai/deepseek-v4-pro",
-    },
+      "model": "litellm/coding"
+    }
   },
   "background_task": {
-    "defaultConcurrency": 20,
-  },
+    "defaultConcurrency": 20
+  }
 }
