@@ -12,19 +12,24 @@
       },
       "models": {
         "coding": {
-          "name": "LiteLLM: coding (deepseek-v4-flash)"
+          "name": "LiteLLM: coding (deepseek-v4-flash)",
+          "limit": { "context": 1000000, "output": 131072 }
         },
         "normal": {
-          "name": "LiteLLM: normal (deepseek-v4-flash)"
+          "name": "LiteLLM: normal (deepseek-v4-flash)",
+          "limit": { "context": 1000000, "output": 131072 }
         },
         "high": {
-          "name": "LiteLLM: high (kimi-k3)"
+          "name": "LiteLLM: high (kimi-k3)",
+          "limit": { "context": 1000000, "output": 131072 }
         },
         "cheap": {
-          "name": "LiteLLM: cheap (qwen-3.7-flash)"
+          "name": "LiteLLM: cheap (qwen-3.7-flash)",
+          "limit": { "context": 1000000, "output": 131072 }
         },
         "multimodal": {
-          "name": "LiteLLM: multimodal (qwen-3.7-flash)"
+          "name": "LiteLLM: multimodal (qwen-3.7-flash)",
+          "limit": { "context": 1000000, "output": 131072 }
         }
       }
     }
