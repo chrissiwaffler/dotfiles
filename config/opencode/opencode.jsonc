@@ -38,6 +38,14 @@
     "nixos": {
       "command": ["nix", "run", "github:utensils/mcp-nixos", "--"],
       "type": "local"
+    },
+    "flywheel": {
+      "type": "remote",
+      "url": "https://flywheel.paradigma.inc/mcp-server",
+      "enabled": true,
+      "headers": {
+        "Authorization": "Bearer {env:FLYWHEEL_API_KEY}"
+      }
     }
   }
 }
