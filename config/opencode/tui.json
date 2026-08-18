@@ -1,4 +1,5 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "theme": "monokai"
+  "theme": "monokai",
+  "plugin": ["oh-my-openagent@latest"]
 }
