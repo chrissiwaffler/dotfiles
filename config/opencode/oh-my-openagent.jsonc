@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
   "agents": {
     "sisyphus": {
-      "model": "litellm/high",
+      "model": "litellm/coding",
       "prompt_append": "For bigger tasks, consult prometheus and atlas for planning. Make extensive use of subagents for parallelized exploration. Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet."
     },
     "hephaestus": {
@@ -13,10 +13,10 @@
       "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet."
     },
     "atlas": {
-      "model": "litellm/high"
+      "model": "litellm/coding"
     },
     "oracle": {
-      "model": "litellm/high"
+      "model": "litellm/coding"
     },
     "librarian": {
       "model": "litellm/coding"
