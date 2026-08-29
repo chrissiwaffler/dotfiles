@@ -79,6 +79,8 @@ with lib; let
         set -eu
 
         export DEBIAN_FRONTEND=noninteractive
+    # host timezone (no /etc/localtime bind mount - see volumes note below)
+    export TZ=Europe/Berlin
 
     # Fixed GID so file ownership is stable across container recreations.
     getent group sandboxusers >/dev/null || groupadd -g 2500 sandboxusers
@@ -87,6 +89,12 @@ with lib; let
 
     # The CUDA base image ships without sudo, so /etc/sudoers.d may not exist.
     install -d -m 755 /etc/sudoers.d
+
+    # Make tzdata's postinst a no-op safeguard? No: with no /etc/localtime
+    # mount it works normally. Set the timezone via debconf instead, so apt
+    # never needs to touch the symlink interactively.
+    echo "tzdata tzdata/Areas select Europe" | debconf-set-selections || true
+    echo "tzdata tzdata/Zones/Europe select Berlin" | debconf-set-selections || true
 
         # --- users ---
         ${concatStringsSep "\n" (mapAttrsToList mkUserBlock cfg.users)}
@@ -217,8 +225,10 @@ in {
             "/var/lib/gpu-sandbox/ssh:/etc/ssh/hostkeys"
             # entrypoint script built on the host from the nix store
             "${setupScript}:/gpu-sandbox/setup.sh:ro"
-            # match host timezone inside the container
-            "/etc/localtime:/etc/localtime:ro"
+            # NOTE: do NOT bind-mount /etc/localtime (even ro). The tzdata
+            # postinst script wants to replace it during apt installs and
+            # fails with "Device or resource busy" on a bind mount.
+            # Timezone is set via TZ env in the setup script instead.
           ];
         extraOptions = [
           "--hostname"
