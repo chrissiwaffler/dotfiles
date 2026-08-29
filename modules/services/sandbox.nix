@@ -80,10 +80,13 @@ with lib; let
 
         export DEBIAN_FRONTEND=noninteractive
 
-        # Fixed GID so file ownership is stable across container recreations.
-        getent group sandboxusers >/dev/null || groupadd -g 2500 sandboxusers
-        # Match the host video GID (26 on this box); belt and braces.
-        getent group video >/dev/null || groupadd -g 26 video
+    # Fixed GID so file ownership is stable across container recreations.
+    getent group sandboxusers >/dev/null || groupadd -g 2500 sandboxusers
+    # Match the host video GID (26 on this box); belt and braces.
+    getent group video >/dev/null || groupadd -g 26 video
+
+    # The CUDA base image ships without sudo, so /etc/sudoers.d may not exist.
+    install -d -m 755 /etc/sudoers.d
 
         # --- users ---
         ${concatStringsSep "\n" (mapAttrsToList mkUserBlock cfg.users)}
