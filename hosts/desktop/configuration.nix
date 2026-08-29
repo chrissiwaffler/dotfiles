@@ -14,6 +14,8 @@
     ../../modules/desktop/tailscale.nix
     # OpenCode persistent server for remote access
     ../../modules/services/opencode-server.nix
+    # Multi-user Ubuntu CUDA sandbox (SSH for colleagues, GPU via CDI)
+    ../../modules/services/sandbox.nix
     # sops-nix for secrets management
     inputs.sops-nix.nixosModules.sops
     # Machine learning environment with Docker
@@ -246,6 +248,27 @@
     # Optional: Enable authentication
     # enableAuth = true;
     # passwordFile = "/run/secrets/opencode-password";
+  };
+
+  # Ubuntu CUDA sandbox for colleagues: SSH on port 2222 (LAN + Tailscale),
+  # GPU access via CDI. Accounts live INSIDE the container, not on the host.
+  services.gpu-sandbox = {
+    enable = true;
+    port = 2222;
+    users = {
+      pancho = {
+        description = "Francisco Kusch";
+        uid = 2001;
+        keys = [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBrmwuE1Mt2ICeKZGW73cpdx1/yN/LZhcK1RmhaK6Vo5 francisco.kusch@gmail.com"
+        ];
+      };
+      # ismail: add ssh key when available (entry without keys = no login)
+      ismail = {
+        uid = 2002;
+        keys = [];
+      };
+    };
   };
 
   # System state version
