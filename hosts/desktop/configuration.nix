@@ -263,10 +263,10 @@
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBrmwuE1Mt2ICeKZGW73cpdx1/yN/LZhcK1RmhaK6Vo5 francisco.kusch@gmail.com"
         ];
       };
-      # ismail: add ssh key when available (entry without keys = no login)
       ismail = {
+        description = "Ismail";
         uid = 2002;
-        keys = [];
+        keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAmNCThT85JEpx4/o+ntE8y4+xEItGU5jYMhGxRZS9e4 ge95fok@mytum.de"];
       };
     };
   };
