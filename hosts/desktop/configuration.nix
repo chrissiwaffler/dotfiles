@@ -30,22 +30,10 @@
   # System-level secrets (accessible to system services)
   # Using the new unified secrets structure: secrets/hosts/<hostname>.yaml
   sops.defaultSopsFile = ../../secrets/hosts/desktop.yaml;
-  sops.secrets.AWS_BEARER_TOKEN_BEDROCK = {};
-  sops.secrets.LITELLM_MASTER_KEY = {};
 
-  # Create environment file for opencode-server with secrets
-  # LITELLM_MASTER_KEY = key for the LiteLLM gateway on starchips (tailnet), the
-  # single model endpoint for opencode. Keep AWS_BEARER_TOKEN_BEDROCK until
-  # nothing references bedrock anymore.
-  sops.templates."opencode-env" = {
-    content = ''
-      AWS_BEARER_TOKEN_BEDROCK=${config.sops.placeholder.AWS_BEARER_TOKEN_BEDROCK}
-      LITELLM_MASTER_KEY=${config.sops.placeholder.LITELLM_MASTER_KEY}
-    '';
-    path = "/run/secrets-rendered/opencode-env";
-    mode = "0440";
-    owner = "chrissi";
-  };
+  # OpenCode server environment — API keys are now injected from the
+  # Home Manager-managed ~/.config/opencode/secrets.env file (generated
+  # from secrets/api-keys.yaml during home-manager activation).
 
   # Enable Docker service
   virtualisation.docker.enable = true;

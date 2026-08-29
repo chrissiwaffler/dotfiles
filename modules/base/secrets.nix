@@ -58,6 +58,21 @@
         fi
       '';
 
+      # Generate a plain KEY=VALUE env file for systemd services that need the
+      # same API keys (e.g. opencode-server). Unlike secrets.zsh which runs yq
+      # at shell startup, this file is generated during home-manager activation
+      # so systemd can read it directly via EnvironmentFile.
+      home.activation.generateSecretsEnv = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        if [[ -f "${config.sops.secrets.api-keys.path}" ]]; then
+          ${pkgs.yq}/bin/yq -r '
+            to_entries | .[] |
+            select(.key != "sops") |
+            (.key | ascii_upcase) + "=" + (.value)
+          ' "${config.sops.secrets.api-keys.path}" > "${config.home.homeDirectory}/.config/opencode/secrets.env"
+          chmod 600 "${config.home.homeDirectory}/.config/opencode/secrets.env"
+        fi
+      '';
+
       # Also wire it into hm-managed zsh when shell.nix is imported (linux/desktop).
       programs.zsh.initContent = lib.mkAfter ''
         [[ -f ~/.config/zsh/secrets.zsh ]] && source ~/.config/zsh/secrets.zsh

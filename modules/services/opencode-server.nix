@@ -95,7 +95,7 @@ in {
         # Load secrets and password from environment files
         EnvironmentFile = mkMerge [
           (mkIf (cfg.enableAuth && cfg.passwordFile != null) [cfg.passwordFile])
-          ["/run/secrets-rendered/opencode-env"]
+          ["${cfg.workingDirectory}/.config/opencode/secrets.env"]
         ];
 
         # Command
