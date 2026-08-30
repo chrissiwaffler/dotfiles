@@ -13,7 +13,7 @@
       "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet.",
     },
     "atlas": {
-      "model": "litellm/high",
+      "model": "litellm/coding",
     },
     "oracle": {
       "model": "litellm/coding",
