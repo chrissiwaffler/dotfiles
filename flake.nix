@@ -32,6 +32,15 @@
       url = "github:michalzubkowicz/nixos-management-skill";
       flake = false;
     };
+
+    # Flywheel agent skills, shipped in the @paradigma-inc/flywheel npm package
+    # (skills/ directory). Source repo is private; the npm registry tarball is
+    # the canonical distribution. Bump version via `nix flake update flywheel-skills`
+    # and the URL below.
+    flywheel-skills = {
+      url = "https://registry.npmjs.org/@paradigma-inc/flywheel/-/flywheel-0.1.115.tgz";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -109,6 +118,8 @@
             home.homeDirectory = "/home/chrissi";
             home.stateVersion = stateVersion;
             nixpkgs.config.allowUnfree = true;
+            # Note: on first switch, pass -b backup to keep pre-existing files
+            # (e.g. `home-manager switch -b backup --flake .#chrissi@linux`)
           }
         ];
         extraSpecialArgs = {
@@ -125,6 +136,8 @@
             home.username = "chrissi";
             home.homeDirectory = "/Users/chrissi";
             home.stateVersion = stateVersion;
+            # Note: on first switch, pass -b backup to keep pre-existing files
+            # (e.g. `home-manager switch -b backup --flake .#chrissi@darwin`)
           }
         ];
         extraSpecialArgs = {

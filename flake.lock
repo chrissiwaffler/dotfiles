@@ -21,6 +21,19 @@
         "type": "github"
       }
     },
+    "flywheel-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 499162500,
+        "narHash": "sha256-TA0nEFzR+mQFtWi7IoPlOiWL9UsHFFdDq7FR3Lsvp5Q=",
+        "type": "tarball",
+        "url": "https://registry.npmjs.org/@paradigma-inc/flywheel/-/flywheel-0.1.115.tgz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://registry.npmjs.org/@paradigma-inc/flywheel/-/flywheel-0.1.115.tgz"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -166,6 +179,7 @@
     },
     "root": {
       "inputs": {
+        "flywheel-skills": "flywheel-skills",
         "home-manager": "home-manager",
         "kickstart-nvim": "kickstart-nvim",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
