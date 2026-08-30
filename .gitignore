@@ -14,6 +14,9 @@ result-*
 .DS_Store
 Thumbs.db
 
+# Agent session data
+.omo/
+
 # sops-nix secrets - exclude private keys, allow encrypted files
 **/keys.txt
 **/*.key.txt
