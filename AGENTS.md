@@ -41,9 +41,6 @@ nix --extra-experimental-features 'nix-command flakes' eval .#homeConfigurations
 
 # Dry-run build without applying
 nix --extra-experimental-features 'nix-command flakes' build .#homeConfigurations."chrissi@linux".activationPackage --dry-run
-
-# Check syntax of Hyprland module
-nix-instantiate --parse modules/desktop/hyprland.nix
 ```
 
 ## Architecture & Structure
@@ -54,21 +51,24 @@ nix-instantiate --parse modules/desktop/hyprland.nix
   - `neovim.nix`: Neovim configuration with LSP support and kickstart.nvim integration
   - `shell.nix`: ZSH, Starship prompt, Git with Delta, and modern CLI tools
   - `tools.nix`: Development tools, languages, ML/AI packages, and cloud tools
-- **`modules/desktop/`**: Desktop environment modules (currently work-in-progress)
+- **`modules/desktop/`**: Desktop environment modules (hyprland, nvidia, tailscale, LLM tooling, performance)
 - **`profiles/`**: Compositions of modules for different use cases
   - `base.nix`: Imports all base modules, used by all configurations
+  - `desktop.nix`: Base + Hyprland desktop (used by `chrissi@linux` and `nixosConfigurations.desktop`)
+  - `darwin-minimal.nix`: Minimal macOS profile (used by `chrissi@darwin`)
 
 ### Flake Structure
 
-- Defines home configurations for `chrissi@linux` and `chrissi@darwin`
-- Uses nixpkgs-25.05 channel
-- Includes overlays for neovim-nightly
+- Defines a NixOS configuration (`nixosConfigurations.desktop`) and home configurations for `chrissi@linux`, `chrissi@darwin`, and `base`
+- Uses `nixos-unstable` (flake input, NOT a local channel) plus `home-manager/master`
+- `stateVersion = "25.05"` (see `flake.nix`) — unrelated to the nixpkgs input
+- Includes the `neovim-nightly-overlay` input; it is currently declared but NOT applied (only `overlays/uutils-darwin-fix.nix` is used in `pkgsFor`)
 
 ## Important Implementation Details
 
 ### Missing Components
 
-- The flake references `./home` directory in homeConfigurations, but this directory doesn't exist. When implementing home configurations, ensure this path is corrected or the directory is created.
+- None currently known. (An earlier version of this file claimed the flake references a nonexistent `./home` directory — this is no longer true; `flake.nix` imports `profiles/` directly.)
 
 ### Cross-Platform Considerations
 
