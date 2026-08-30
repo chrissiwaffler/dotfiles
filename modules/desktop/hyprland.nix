@@ -57,7 +57,7 @@
       exec-once = [
         "${pkgs.waybar}/bin/waybar"
         "${pkgs.dunst}/bin/dunst"
-        "${pkgs.swww}/bin/swww init"
+        "${pkgs.swww}/bin/awww-daemon"
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
       ];
 
@@ -118,7 +118,6 @@
 
       # Dwindle layout
       dwindle = {
-        pseudotile = true;
         preserve_split = true;
       };
 
@@ -129,9 +128,9 @@
       };
 
       # Window rules
-      windowrulev2 = [
-        "opacity 0.9 0.9,class:^(kitty)$"
-        "opacity 0.9 0.9,class:^(Alacritty)$"
+      windowrule = [
+        "match:class ^(kitty)$ opacity 0.9 0.9"
+        "match:class ^(Alacritty)$ opacity 0.9 0.9"
       ];
 
       # Mod key (Super key)
@@ -150,7 +149,7 @@
         "$mod, F, fullscreen,"
         "$mod, Space, togglefloating,"
         "$mod, P, pseudo,"
-        "$mod, J, togglesplit,"
+        "$mod, T, layoutmsg, togglesplit,"
 
         # Focus movement
         "$mod, left, movefocus, l"
