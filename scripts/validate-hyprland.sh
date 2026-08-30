@@ -109,7 +109,7 @@ fi
 # 6. Check for required packages
 echo ""
 echo "6. Checking required packages..."
-REQUIRED_PACKAGES=("kitty" "rofi-wayland" "waybar" "dunst" "swww")
+REQUIRED_PACKAGES=("kitty" "rofi" "waybar" "dunst" "awww")
 for pkg in "${REQUIRED_PACKAGES[@]}"; do
     if nix --extra-experimental-features 'nix-command flakes' eval .#homeConfigurations.\"chrissi@linux\".config.home.packages 2>/dev/null | grep -q "$pkg"; then
         echo -e "${GREEN}✓ Package '$pkg' is included${NC}"
