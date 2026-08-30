@@ -30,8 +30,15 @@
 
     # Flywheel agent skills, shipped in the @paradigma-inc/flywheel npm package
     # (skills/ directory). Source repo is private; the npm registry tarball is
-    # the canonical distribution. Bump version via `nix flake update flywheel-skills`
-    # and the URL below.
+    # the canonical distribution.
+    # Bump procedure: bump the version in the URL below → `nix flake update
+    # flywheel-skills` → refresh pkgs/flywheel/package-lock.json + npmDepsHash
+    # only if dependencies changed. The URL is the single version source in
+    # flake.nix; the package version itself is derived from the tarball's
+    # package.json in pkgs/flywheel/default.nix.
+    # NOTE: this URL must stay a string literal — Nix (>= 2.29) rejects
+    # interpolated input URLs at schema time ("expected a string but got a
+    # thunk"), so a `flywheelVersion` binding cannot be referenced here.
     flywheel-skills = {
       url = "https://registry.npmjs.org/@paradigma-inc/flywheel/-/flywheel-0.1.115.tgz";
       flake = false;
@@ -54,6 +61,7 @@
     # Import custom overlays
     overlays = [
       (import ./overlays/uutils-darwin-fix.nix)
+      (import ./overlays/flywheel.nix {inherit (inputs) flywheel-skills;})
     ];
 
     # Helper to apply overlays to nixpkgs
@@ -192,5 +200,8 @@
         };
       }
     );
+
+    # packages output for direct QA builds (e.g. `nix build .#flywheel`)
+    packages = forAllSystems (system: {flywheel = (pkgsFor system).flywheel;});
   };
 }

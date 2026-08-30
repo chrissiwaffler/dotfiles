@@ -51,6 +51,7 @@ nix --extra-experimental-features 'nix-command flakes' build .#homeConfiguration
   - `neovim.nix`: Neovim configuration with LSP support and kickstart.nvim integration
   - `shell.nix`: ZSH, Starship prompt, Git with Delta, and modern CLI tools
   - `tools.nix`: Development tools, languages, ML/AI packages, and cloud tools
+  - `flywheel.nix`: Flywheel agent skills and CLI — deploys skills from the `flywheel-skills` flake input (npm tarball `@paradigma-inc/flywheel`) to `~/.agents/skills/` as one symlink per skill with junk filtered (`__pycache__`, `*.pyc`, `.DS_Store`); installs the CLI via `pkgs.flywheel` (overlay-provided package, `overlays/flywheel.nix`); writes `~/.config/flywheel-cli/config.json` at activation time from the sops-decrypted `flywheel_api_key` (this file and the `FLYWHEEL_API_KEY` env var exported by `modules/base/secrets.nix` are both auth channels); cleans up legacy npm-installer artifacts at activation time (stale `~/.agents/skills/flywheel*` and `~/.claude/skills/flywheel*` copies plus the `.flywheel-installed-by-universal` marker)
 - **`modules/desktop/`**: Desktop environment modules (hyprland, nvidia, tailscale, LLM tooling)
 - **`profiles/`**: Compositions of modules for different use cases
   - `base.nix`: Imports all base modules, used by all configurations
@@ -105,3 +106,11 @@ When adding new packages:
 - Development tools go in `modules/base/tools.nix`
 - Shell-specific tools and aliases go in `modules/base/shell.nix`
 - Editor plugins and LSP servers go in `modules/base/neovim.nix`
+
+### Flywheel version bump
+
+The Flywheel CLI and skills come from a single npm tarball version. The version is pinned as a literal in the `flywheel-skills` input URL in `flake.nix` (Nix requires input URLs to be string literals, so no version binding is possible):
+
+1. Bump the version in the `flywheel-skills` URL in `flake.nix`
+2. `nix flake update flywheel-skills`
+3. Refresh `pkgs/flywheel/package-lock.json` + `npmDepsHash` only if dependencies changed
