@@ -9,7 +9,7 @@
     ../modules/base/git.nix
     ../modules/base/neovim.nix
     ../modules/base/opencode.nix
-    ../modules/base/skills.nix
+    ../modules/base/flywheel.nix
     ../modules/base/secrets.nix
   ];
 

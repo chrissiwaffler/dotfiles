@@ -13,7 +13,7 @@
     ../modules/base/secrets.nix
     ../modules/base/git.nix
     ../modules/base/opencode.nix
-    ../modules/base/skills.nix
+    ../modules/base/flywheel.nix
   ];
 
   # let home-manager manage itself
