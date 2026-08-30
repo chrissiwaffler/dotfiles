@@ -3,66 +3,66 @@
   "agents": {
     "sisyphus": {
       "model": "litellm/coding",
-      "prompt_append": "For bigger tasks, consult prometheus and atlas for planning. Make extensive use of subagents for parallelized exploration. Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet."
+      "prompt_append": "For bigger tasks, consult prometheus and atlas for planning. Make extensive use of subagents for parallelized exploration. Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet.",
     },
     "hephaestus": {
-      "model": "litellm/high"
+      "model": "litellm/high",
     },
     "prometheus": {
       "model": "litellm/high",
-      "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet."
+      "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet.",
     },
     "atlas": {
-      "model": "litellm/coding"
+      "model": "litellm/high",
     },
     "oracle": {
-      "model": "litellm/coding"
+      "model": "litellm/coding",
     },
     "librarian": {
-      "model": "litellm/coding"
+      "model": "litellm/coding",
     },
     "explore": {
-      "model": "litellm/coding"
+      "model": "litellm/coding",
     },
     "multimodal-looker": {
-      "model": "litellm/multimodal"
+      "model": "litellm/multimodal",
     },
     "metis": {
       "model": "litellm/high",
-      "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet."
+      "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet.",
     },
     "momus": {
       "model": "litellm/high",
-      "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet."
-    }
+      "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet.",
+    },
   },
   "categories": {
     "visual-engineering": {
-      "model": "litellm/high"
+      "model": "litellm/high",
     },
     "ultrabrain": {
-      "model": "litellm/high"
+      "model": "litellm/high",
     },
     "deep": {
-      "model": "litellm/high"
+      "model": "litellm/high",
     },
     "artistry": {
-      "model": "litellm/multimodal"
+      "model": "litellm/multimodal",
     },
     "quick": {
-      "model": "litellm/coding"
+      "model": "litellm/coding",
     },
     "unspecified-low": {
-      "model": "litellm/cheap"
+      "model": "litellm/cheap",
     },
     "unspecified-high": {
-      "model": "litellm/high"
+      "model": "litellm/high",
     },
     "writing": {
-      "model": "litellm/coding"
-    }
+      "model": "litellm/coding",
+    },
   },
   "background_task": {
-    "defaultConcurrency": 20
-  }
+    "defaultConcurrency": 20,
+  },
 }
