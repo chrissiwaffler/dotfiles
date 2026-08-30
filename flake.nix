@@ -15,7 +15,7 @@
     };
 
     opencode = {
-      url = "github:anomalyco/opencode/v1.18.21";
+      url = "github:anomalyco/opencode/v1.18.25";
     };
 
     kickstart-nvim = {
