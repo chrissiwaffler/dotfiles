@@ -20,8 +20,6 @@
     inputs.sops-nix.nixosModules.sops
     # Machine learning environment with Docker
     #../../modules/desktop/machine-learning.nix
-    # RTX 5090 optimized AI configuration
-    # ../../modules/desktop/rtx5090-ai.nix
     # Keep LM Studio for GUI option
     # ../../modules/desktop/lmstudio.nix
   ];

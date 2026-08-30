@@ -102,7 +102,7 @@ in {
         ExecStart = let
           args =
             [
-              "${inputs.opencode.packages.${pkgs.system}.default}/bin/opencode"
+              "${inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/opencode"
               "serve"
               "--port ${toString cfg.port}"
               "--hostname ${cfg.hostname}"

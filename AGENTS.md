@@ -51,7 +51,7 @@ nix --extra-experimental-features 'nix-command flakes' build .#homeConfiguration
   - `neovim.nix`: Neovim configuration with LSP support and kickstart.nvim integration
   - `shell.nix`: ZSH, Starship prompt, Git with Delta, and modern CLI tools
   - `tools.nix`: Development tools, languages, ML/AI packages, and cloud tools
-- **`modules/desktop/`**: Desktop environment modules (hyprland, nvidia, tailscale, LLM tooling, performance)
+- **`modules/desktop/`**: Desktop environment modules (hyprland, nvidia, tailscale, LLM tooling)
 - **`profiles/`**: Compositions of modules for different use cases
   - `base.nix`: Imports all base modules, used by all configurations
   - `desktop.nix`: Base + Hyprland desktop (used by `chrissi@linux` and `nixosConfigurations.desktop`)
@@ -62,7 +62,6 @@ nix --extra-experimental-features 'nix-command flakes' build .#homeConfiguration
 - Defines a NixOS configuration (`nixosConfigurations.desktop`) and home configurations for `chrissi@linux`, `chrissi@darwin`, and `base`
 - Uses `nixos-unstable` (flake input, NOT a local channel) plus `home-manager/master`
 - `stateVersion = "25.05"` (see `flake.nix`) — unrelated to the nixpkgs input
-- Includes the `neovim-nightly-overlay` input; it is currently declared but NOT applied (only `overlays/uutils-darwin-fix.nix` is used in `pkgsFor`)
 
 ## Important Implementation Details
 

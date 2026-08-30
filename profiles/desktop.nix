@@ -8,7 +8,6 @@
   imports = [
     ./base.nix
     ../modules/desktop/hyprland.nix
-
   ];
 
   # API keys automatically loaded from secrets/api-keys.yaml
@@ -106,6 +105,9 @@
       name = "Arc-Dark";
       package = pkgs.arc-theme;
     };
+    # Pin the legacy default (new default is null) so the GTK4 theme keeps
+    # following gtk.theme; silences the stateVersion < 26.05 warning.
+    gtk4.theme = config.gtk.theme;
     iconTheme = {
       name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;

@@ -33,6 +33,9 @@
     enable = true;
     xwayland.enable = true;
     systemd.enable = true; # Enable systemd integration
+    # Pin the legacy default (new default is "lua"); this repo only uses
+    # hyprlang `settings`, so keep hyprlang; silences the warning.
+    configType = "hyprlang";
 
     settings = {
       # Monitor configuration (adjust to your setup)
@@ -57,7 +60,7 @@
       exec-once = [
         "${pkgs.waybar}/bin/waybar"
         "${pkgs.dunst}/bin/dunst"
-        "${pkgs.swww}/bin/awww-daemon"
+        "${pkgs.awww}/bin/awww-daemon"
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
       ];
 
@@ -231,7 +234,7 @@
     dunst
 
     # Wallpaper
-    swww
+    awww
 
     # Screenshot tool
     grim

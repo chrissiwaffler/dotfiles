@@ -7,6 +7,9 @@
   # ZSH Configuration
   programs.zsh = {
     enable = true;
+    # Pin the legacy default so zshrc stays at ~/.zshrc; silences the
+    # upcoming dotDir default-change warning (stateVersion < 26.05).
+    dotDir = config.home.homeDirectory;
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;

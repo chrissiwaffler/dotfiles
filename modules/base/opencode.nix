@@ -24,6 +24,6 @@
 
   home.packages = [
     # AI coding assistant from flake input
-    inputs.opencode.packages.${pkgs.system}.default
+    inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }
