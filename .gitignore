@@ -24,3 +24,4 @@ Thumbs.db
 !hosts/*/secrets.yaml
 
 .local
+.sisyphus/
