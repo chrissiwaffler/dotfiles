@@ -28,23 +28,23 @@
       "model": "litellm/multimodal",
     },
     "metis": {
-      "model": "litellm/high",
+      "model": "litellm/coding",
       "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet.",
     },
     "momus": {
-      "model": "litellm/high",
+      "model": "litellm/coding",
       "prompt_append": "Make use of subagents since you can spawn up to 20 subagents in parallel at the same time to explore the codebase, documentation and the internet.",
     },
   },
   "categories": {
     "visual-engineering": {
-      "model": "litellm/high",
+      "model": "litellm/coding",
     },
     "ultrabrain": {
-      "model": "litellm/high",
+      "model": "litellm/coding",
     },
     "deep": {
-      "model": "litellm/high",
+      "model": "litellm/coding",
     },
     "artistry": {
       "model": "litellm/multimodal",
@@ -56,7 +56,7 @@
       "model": "litellm/cheap",
     },
     "unspecified-high": {
-      "model": "litellm/high",
+      "model": "litellm/coding",
     },
     "writing": {
       "model": "litellm/coding",
