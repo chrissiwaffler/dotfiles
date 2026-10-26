@@ -374,10 +374,18 @@ in {
 
           install -m 0644 ${seedIso} ${imageDir}/seed.iso
 
-          ${virsh} define ${domainXml}
-          if [ "$(${virsh} domstate ${vm.name})" != "running" ]; then
-            ${virsh} start ${vm.name}
+          if [ "$(${virsh} domstate ${vm.name} 2>/dev/null)" = "running" ]; then
+            echo "${vm.name} already running"
+            exit 0
           fi
+          # The XML carries no <uuid>, so libvirt would refuse to redefine an
+          # existing domain under a fresh one. Re-create it from the current
+          # XML on every start; disks and NVRAM (UEFI vars) are kept.
+          if ${virsh} dominfo ${vm.name} >/dev/null 2>&1; then
+            ${virsh} undefine --keep-nvram ${vm.name}
+          fi
+          ${virsh} define ${domainXml}
+          ${virsh} start ${vm.name}
         '';
       };
     })
