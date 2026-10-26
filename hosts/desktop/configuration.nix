@@ -12,6 +12,8 @@
     ../../modules/desktop/nvidia.nix
     # Tailscale VPN for remote access
     ../../modules/desktop/tailscale.nix
+    # Turn off all RGB lighting (Corsair iCUE LINK, MSI board/GPU) via OpenRGB
+    ../../modules/desktop/rgb-off.nix
     # OpenCode persistent server for remote access
     ../../modules/services/opencode-server.nix
     # Multi-user Ubuntu CUDA sandbox (SSH for colleagues, GPU via CDI)
@@ -210,9 +212,6 @@
   services.thermald = {
     enable = true;
   };
-
-  # Turn off RGB for max stealth mode
-  services.hardware.openrgb.enable = false; # or configure quiet profiles
 
   powerManagement = {
     enable = true;
