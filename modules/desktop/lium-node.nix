@@ -325,7 +325,14 @@ in {
       # Claim the GPU with vfio-pci in the initrd, before any driver can.
       # AVIC off: rules out a historically fragile KVM path after a guest vCPU
       # got into a broken state (2026-10-26). Negligible cost for this VM.
-      boot.kernelParams = ["amd_iommu=on" "iommu=pt" "kvm_amd.avic=0"];
+      #
+      # clearcpuid=519 hides CET shadow stacks (CPUID.7.0:ECX[7], Linux feature
+      # word 16*32+7) from the host, so KVM 6.18 stops exposing them to the
+      # guest. QEMU 10.2 does not know CET, and with it passed through a guest
+      # vCPU ended up with a stale shadow stack pointer: every process on that
+      # vCPU died with shadow-stack page faults (error code bit 0x40) at one
+      # fixed address, taking dockerd and the executor down within minutes.
+      boot.kernelParams = ["amd_iommu=on" "iommu=pt" "kvm_amd.avic=0" "clearcpuid=519"];
       boot.initrd.kernelModules = ["vfio_pci" "vfio" "vfio_iommu_type1"];
       boot.extraModprobeConfig = "options vfio-pci ids=${lib.concatStringsSep "," cfg.gpu.pciIds}";
       boot.blacklistedKernelModules = ["nvidia" "nvidia_drm" "nvidia_modeset" "nvidia_uvm" "nouveau"];
