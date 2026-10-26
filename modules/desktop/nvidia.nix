@@ -3,7 +3,10 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+# The lium specialisation hands the GPU to a VM via vfio-pci, so none of this
+# may apply there (see modules/desktop/lium-node.nix).
+lib.mkIf (!config.services.lium-node.active) {
   # Enable NVIDIA drivers - prioritize over integrated graphics
   services.xserver.videoDrivers = ["nvidia"];
 

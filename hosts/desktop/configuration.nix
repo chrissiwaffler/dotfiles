@@ -14,6 +14,8 @@
     ../../modules/desktop/tailscale.nix
     # Turn off all RGB lighting (Corsair iCUE LINK, MSI board/GPU) via OpenRGB
     ../../modules/desktop/rgb-off.nix
+    # "lium" boot entry: GPU passthrough to an Ubuntu VM running a Lium.io node
+    ../../modules/desktop/lium-node.nix
     # OpenCode persistent server for remote access
     ../../modules/services/opencode-server.nix
     # Multi-user Ubuntu CUDA sandbox (SSH for colleagues, GPU via CDI)
@@ -92,9 +94,9 @@
     extraPortals = [pkgs.xdg-desktop-portal-gtk];
   };
 
-  # Display manager
+  # Display manager (not in the headless lium specialisation)
   services.greetd = {
-    enable = true;
+    enable = !config.services.lium-node.active;
     settings = {
       default_session = {
         command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
@@ -104,7 +106,7 @@
   };
 
   # Fix greetd systemd service configuration
-  systemd.services.greetd.serviceConfig = {
+  systemd.services.greetd.serviceConfig = lib.mkIf config.services.greetd.enable {
     Type = "idle";
     StandardInput = "tty";
     StandardOutput = "tty";
@@ -249,8 +251,9 @@
 
   # Ubuntu CUDA sandbox for colleagues: SSH on port 2222 (LAN + Tailscale),
   # GPU access via CDI. Accounts live INSIDE the container, not on the host.
+  # Disabled in the lium specialisation: the GPU belongs to the VM there.
   services.gpu-sandbox = {
-    enable = true;
+    enable = !config.services.lium-node.active;
     port = 2222;
     users = {
       pancho = {
@@ -265,6 +268,23 @@
         uid = 2002;
         keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAmNCThT85JEpx4/o+ntE8y4+xEItGU5jYMhGxRZS9e4 ge95fok@mytum.de"];
       };
+    };
+  };
+
+  # Lium.io GPU node: extra boot entry "lium" (see modules/desktop/lium-node.nix).
+  # Host keeps 4 threads and ~11 GiB RAM; the VM gets 600 GiB preallocated disk.
+  services.lium-node = {
+    enable = true;
+    gpu = {
+      pciIds = ["10de:2b85" "10de:22e8"]; # RTX 5090 + HDMI audio
+      pciAddresses = ["0000:01:00.0" "0000:01:00.1"];
+    };
+    vm = {
+      vcpus = 28;
+      memoryGiB = 80;
+      rootDiskGiB = 64;
+      dataDiskGiB = 536;
+      hostInterface = "enp7s0";
     };
   };
 
