@@ -114,6 +114,25 @@
             systemctl reboot
           '';
         }
+        # Grow the XFS docker filesystem into the data disk on every boot, so
+        # raising dataDiskGiB on the host takes effect after a VM restart.
+        # Online and a no-op when there is nothing to grow.
+        {
+          path = "/etc/systemd/system/lium-growfs.service";
+          content = ''
+            [Unit]
+            Description=Grow the XFS docker filesystem to the data disk size
+            RequiresMountsFor=/var/lib/docker
+            Before=docker.service
+
+            [Service]
+            Type=oneshot
+            ExecStart=/usr/sbin/xfs_growfs /var/lib/docker
+
+            [Install]
+            WantedBy=multi-user.target
+          '';
+        }
       ];
       apt.sources.docker = {
         source = "deb [arch=amd64 signed-by=$KEY_FILE] https://download.docker.com/linux/ubuntu $RELEASE stable";
@@ -147,6 +166,7 @@
         ''
         "usermod -aG docker ${cfg.user}"
         "systemctl enable --now docker"
+        "systemctl daemon-reload && systemctl enable lium-growfs.service"
       ];
       final_message = "lium-node provisioned after $UPTIME s";
     });
@@ -378,6 +398,22 @@ in {
             ${pkgs.util-linux}/bin/fallocate -l ${toString vm.dataDiskGiB}GiB ${imageDir}/data.img.tmp
             mv ${imageDir}/data.img.tmp ${imageDir}/data.img
           fi
+
+          # Grow (never shrink) existing images when the configured size was
+          # raised. The guest grows its filesystems on boot: cloud-init
+          # growpart for /, lium-growfs.service (xfs_growfs) for the data disk.
+          grow() {
+            local img=$1 want=$(( $2 * 1024 * 1024 * 1024 )) cur
+            cur=$(stat -c %s "$img")
+            if [ "$cur" -lt "$want" ]; then
+              echo "Growing $img from $(( cur / 1024 / 1024 / 1024 )) to $2 GiB (preallocated)"
+              ${pkgs.util-linux}/bin/fallocate -l "$want" "$img"
+            elif [ "$cur" -gt "$want" ]; then
+              echo "WARNING: $img is larger than configured $2 GiB; not shrinking" >&2
+            fi
+          }
+          grow ${imageDir}/root.img ${toString vm.rootDiskGiB}
+          grow ${imageDir}/data.img ${toString vm.dataDiskGiB}
 
           install -m 0644 ${seedIso} ${imageDir}/seed.iso
 

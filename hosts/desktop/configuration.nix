@@ -272,7 +272,8 @@
   };
 
   # Lium.io GPU node: extra boot entry "lium" (see modules/desktop/lium-node.nix).
-  # Host keeps 4 threads and ~11 GiB RAM; the VM gets 600 GiB preallocated disk.
+  # Host keeps 2 threads and ~7 GiB RAM; the VM gets 640 GiB preallocated disk.
+  # Disk sizes can only grow (images are extended on the next VM start).
   services.lium-node = {
     enable = true;
     gpu = {
@@ -280,10 +281,10 @@
       pciAddresses = ["0000:01:00.0" "0000:01:00.1"];
     };
     vm = {
-      vcpus = 28;
-      memoryGiB = 80;
+      vcpus = 30;
+      memoryGiB = 84;
       rootDiskGiB = 64;
-      dataDiskGiB = 536;
+      dataDiskGiB = 576;
       hostInterface = "enp7s0";
     };
   };
