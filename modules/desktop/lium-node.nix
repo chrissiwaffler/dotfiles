@@ -6,14 +6,15 @@
 # an Ubuntu 24.04 VM, which is provisioned automatically via cloud-init:
 #   - root disk from the Ubuntu cloud image, data disk as XFS (pquota) for
 #     /var/lib/docker (both preallocated, see diskGiB options)
-#   - NVIDIA open DKMS driver, Docker CE 28.x, Tailscale (not logged in)
+#   - NVIDIA open DKMS driver, Docker CE 28.x
 # The Lium node itself is installed once by hand inside the VM:
 #   curl -fsSL https://lium.io/mine.sh | bash -s -- --register <token>
 #
 # Networking: the VM sits directly in the LAN via macvtap (own MAC/DHCP lease).
 # Router port forwards (8080, 2200, 20000+) must point to the VM's IP. The host
 # cannot reach the VM over macvtap; use `virsh console lium-node` on the host,
-# or SSH/Tailscale from another machine.
+# or SSH from another LAN machine. Deliberately no Tailscale in the VM: renters
+# may get root there and would end up inside the tailnet.
 #
 # Disk images are created only once, on the first boot into "lium"; changing
 # sizes later requires deleting them in /var/lib/libvirt/images/lium-node.
@@ -77,6 +78,42 @@
             Pin-Priority: 1001
           '';
         }
+        # Self-healing: once dockerd gives up (restart limit hit), reboot the
+        # VM. A guest reboot clears broken vCPU state (seen 2026-10-26: all
+        # processes on one vCPU segfaulting) and the GPU survives it. The
+        # uptime guard prevents a reboot loop if Docker is broken for real.
+        {
+          path = "/etc/systemd/system/docker.service.d/reboot-on-failure.conf";
+          content = ''
+            [Unit]
+            OnFailure=lium-recover.service
+          '';
+        }
+        {
+          path = "/etc/systemd/system/lium-recover.service";
+          content = ''
+            [Unit]
+            Description=Reboot the Lium node VM after docker.service failed
+
+            [Service]
+            Type=oneshot
+            ExecStart=/usr/local/sbin/lium-recover
+          '';
+        }
+        {
+          path = "/usr/local/sbin/lium-recover";
+          permissions = "0755";
+          content = ''
+            #!/bin/sh
+            up=$(cut -d. -f1 /proc/uptime)
+            if [ "$up" -lt 900 ]; then
+              echo "docker failed ''${up}s after boot, not rebooting (loop guard)"
+              exit 0
+            fi
+            echo "docker failed, rebooting VM"
+            systemctl reboot
+          '';
+        }
       ];
       apt.sources.docker = {
         source = "deb [arch=amd64 signed-by=$KEY_FILE] https://download.docker.com/linux/ubuntu $RELEASE stable";
@@ -110,7 +147,6 @@
         ''
         "usermod -aG docker ${cfg.user}"
         "systemctl enable --now docker"
-        "curl -fsSL https://tailscale.com/install.sh | sh"
       ];
       final_message = "lium-node provisioned after $UPTIME s";
     });
@@ -287,7 +323,9 @@ in {
       ];
 
       # Claim the GPU with vfio-pci in the initrd, before any driver can.
-      boot.kernelParams = ["amd_iommu=on" "iommu=pt"];
+      # AVIC off: rules out a historically fragile KVM path after a guest vCPU
+      # got into a broken state (2026-10-26). Negligible cost for this VM.
+      boot.kernelParams = ["amd_iommu=on" "iommu=pt" "kvm_amd.avic=0"];
       boot.initrd.kernelModules = ["vfio_pci" "vfio" "vfio_iommu_type1"];
       boot.extraModprobeConfig = "options vfio-pci ids=${lib.concatStringsSep "," cfg.gpu.pciIds}";
       boot.blacklistedKernelModules = ["nvidia" "nvidia_drm" "nvidia_modeset" "nvidia_uvm" "nouveau"];
