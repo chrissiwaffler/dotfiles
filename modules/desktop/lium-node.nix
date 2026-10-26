@@ -332,6 +332,10 @@ in {
 
       virtualisation.libvirtd = {
         enable = true;
+        # QEMU as unprivileged qemu-libvirtd instead of root, so a VM escape by
+        # a renter does not land as root on the host. libvirt chowns disks,
+        # NVRAM and /dev/vfio/* to that user when the VM starts.
+        qemu.runAsRoot = false;
         # lium-vm.service starts the VM; libvirt-guests shuts it down cleanly
         # (suspend/managedsave does not work with a passed-through GPU).
         onBoot = "ignore";
