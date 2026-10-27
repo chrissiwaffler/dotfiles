@@ -12,8 +12,10 @@
     ../../modules/desktop/nvidia.nix
     # Tailscale VPN for remote access
     ../../modules/desktop/tailscale.nix
-    # Turn off all RGB lighting (Corsair iCUE LINK, MSI board/GPU) via OpenRGB
+    # Turn off RGB lighting (RAM, GPU) via OpenRGB
     ../../modules/desktop/rgb-off.nix
+    # Fan/pump curves for the Corsair iCUE LINK hubs (CPU temperature based)
+    ../../modules/desktop/openlinkhub.nix
     # "lium" boot entry: GPU passthrough to an Ubuntu VM running a Lium.io node
     ../../modules/desktop/lium-node.nix
     # OpenCode persistent server for remote access

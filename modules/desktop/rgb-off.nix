@@ -4,7 +4,7 @@
   ...
 }: let
   # Connects to the OpenRGB SDK server and blanks every device: devices with an
-  # "Off" mode get it, the rest (e.g. Corsair iCUE LINK hub) get direct black.
+  # "Off" mode get it, the rest (e.g. Corsair RAM) get direct black.
   rgbOff =
     pkgs.writers.writePython3Bin "rgb-off" {
       libraries = [pkgs.python3Packages.openrgb-python];
@@ -48,13 +48,21 @@
               print(f"{dev.name}: black")
     '';
 in {
-  # The OpenRGB server installs the udev rules + i2c modules and must keep
-  # running: it holds the iCUE LINK hub in software mode, otherwise the hub
-  # falls back to its built-in rainbow effect.
+  # The OpenRGB server installs the udev rules + i2c modules and handles the
+  # RAM and GPU lighting. The iCUE LINK hubs are owned by OpenLinkHub
+  # (openlinkhub.nix, fan curves + lighting off), so OpenRGB's detector for
+  # them is disabled; two programs driving the same hub would fight.
   services.hardware.openrgb = {
     enable = true;
     motherboard = "amd";
   };
+
+  systemd.services.openrgb.preStart = ''
+    cfg=/var/lib/OpenRGB/OpenRGB.json
+    [ -s "$cfg" ] || echo '{}' > "$cfg"
+    ${pkgs.jq}/bin/jq '.Detectors.detectors["Corsair iCUE Link System Hub"] = false' "$cfg" > "$cfg.tmp"
+    mv "$cfg.tmp" "$cfg"
+  '';
 
   systemd.services.rgb-off = {
     description = "Turn off all RGB lighting via OpenRGB";
