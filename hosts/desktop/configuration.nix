@@ -278,6 +278,9 @@
   # Disk sizes can only grow (images are extended on the next VM start).
   services.lium-node = {
     enable = true;
+    # Reboots land in the newest "lium" entry; pick the plain entry in the
+    # boot menu for the normal desktop.
+    bootByDefault = true;
     gpu = {
       pciIds = ["10de:2b85" "10de:22e8"]; # RTX 5090 + HDMI audio
       pciAddresses = ["0000:01:00.0" "0000:01:00.1"];

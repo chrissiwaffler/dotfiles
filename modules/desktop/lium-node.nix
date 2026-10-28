@@ -254,6 +254,16 @@ in {
   options.services.lium-node = {
     enable = mkEnableOption "the \"lium\" boot specialisation (GPU passthrough to an Ubuntu Lium node VM)";
 
+    bootByDefault = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Make the newest generation's "lium" entry the systemd-boot default, so
+        the machine comes back as a Lium node after every reboot. The normal
+        desktop stays selectable in the boot menu.
+      '';
+    };
+
     active = mkOption {
       type = types.bool;
       default = false;
@@ -332,6 +342,24 @@ in {
         system.nixos.tags = ["lium"];
         services.lium-node.active = true;
       };
+    })
+
+    # The systemd-boot builder always writes the base generation as default;
+    # this runs right after it and points loader.conf at the same
+    # generation's lium entry instead. An EFI "LoaderEntryDefault" variable
+    # (set via the menu's `d` key or `bootctl set-default`) would still take
+    # precedence; clear it with `sudo bootctl set-default ""`.
+    (mkIf (cfg.enable && cfg.bootByDefault) {
+      boot.loader.systemd-boot.extraInstallCommands = let
+        esp = config.boot.loader.efi.efiSysMountPoint;
+      in ''
+        conf=${esp}/loader/loader.conf
+        gen=$(${pkgs.gnused}/bin/sed -n 's/^default \(nixos-generation-[0-9]*\)\.conf$/\1/p' "$conf")
+        if [ -n "$gen" ] && [ -f "${esp}/loader/entries/$gen-specialisation-lium.conf" ]; then
+          ${pkgs.gnused}/bin/sed -i "s/^default .*/default $gen-specialisation-lium.conf/" "$conf"
+          echo "systemd-boot default: $gen-specialisation-lium.conf"
+        fi
+      '';
     })
 
     (mkIf cfg.active {
