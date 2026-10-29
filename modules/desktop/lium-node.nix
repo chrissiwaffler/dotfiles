@@ -354,17 +354,21 @@ in {
       boot.loader.systemd-boot.extraInstallCommands = let
         esp = config.boot.loader.efi.efiSysMountPoint;
       in ''
-        # Delete a stale EFI "LoaderEntryDefault" variable (boot menu `d` key
-        # or bootctl set-default): it overrides loader.conf and keeps booting
-        # a pinned old entry forever. `bootctl set-default ""` does not
-        # reliably clear it across systemd versions, so remove the variable
-        # file directly (efivars are created immutable).
-        loaderVar=/sys/firmware/efi/efivars/LoaderEntryDefault-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f
-        if [ -e "$loaderVar" ]; then
-          ${pkgs.e2fsprogs}/bin/chattr -i "$loaderVar" 2>/dev/null || true
-          rm -f "$loaderVar" || true
-          echo "cleared stale EFI LoaderEntryDefault"
-        fi
+        # Delete stale EFI loader variables that pin an old boot entry over
+        # loader.conf: LoaderEntryPreferred / LoaderEntryDefault are set via
+        # the boot menu `d` key or `bootctl set-default` and override the
+        # loader.conf default forever. `bootctl set-default ""` does not
+        # reliably clear them across systemd versions, so remove the variable
+        # files directly (efivars are created immutable). LoaderEntrySelected
+        # is informational (last booted entry, rewritten each boot) — keep it.
+        for varName in LoaderEntryPreferred LoaderEntryDefault; do
+          loaderVar=/sys/firmware/efi/efivars/$varName-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f
+          if [ -e "$loaderVar" ]; then
+            ${pkgs.e2fsprogs}/bin/chattr -i "$loaderVar" 2>/dev/null || true
+            rm -f "$loaderVar" || true
+            echo "cleared stale EFI $varName"
+          fi
+        done
         conf=${esp}/loader/loader.conf
         gen=$(${pkgs.gnused}/bin/sed -n 's/^default \(nixos-generation-[0-9]*\)\.conf$/\1/p' "$conf")
         if [ -n "$gen" ] && [ -f "${esp}/loader/entries/$gen-specialisation-lium.conf" ]; then
