@@ -41,6 +41,8 @@
   # Useful for disaster recovery or fresh installations
   users.users.chrissi.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN4V1OCAHZiCphUzMleHrIaxjOg0gcFx/8ywRJFcCLUM chrissi@Christophs-MBP"
+    # Hermes agent on starchips (remote admin over Tailscale)
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPfjda8YpZO5GpsBBrq0gDyETOwWwRSqoRPvhrxQt516 hermes-coding-agent"
   ];
 
   # Create a systemd service to authenticate with Tailscale
