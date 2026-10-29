@@ -354,7 +354,17 @@ in {
       boot.loader.systemd-boot.extraInstallCommands = let
         esp = config.boot.loader.efi.efiSysMountPoint;
       in ''
-        ${pkgs.systemd}/bin/bootctl --esp-path=${esp} set-default "" || true
+        # Delete a stale EFI "LoaderEntryDefault" variable (boot menu `d` key
+        # or bootctl set-default): it overrides loader.conf and keeps booting
+        # a pinned old entry forever. `bootctl set-default ""` does not
+        # reliably clear it across systemd versions, so remove the variable
+        # file directly (efivars are created immutable).
+        loaderVar=/sys/firmware/efi/efivars/LoaderEntryDefault-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f
+        if [ -e "$loaderVar" ]; then
+          ${pkgs.e2fsprogs}/bin/chattr -i "$loaderVar" 2>/dev/null || true
+          rm -f "$loaderVar" || true
+          echo "cleared stale EFI LoaderEntryDefault"
+        fi
         conf=${esp}/loader/loader.conf
         gen=$(${pkgs.gnused}/bin/sed -n 's/^default \(nixos-generation-[0-9]*\)\.conf$/\1/p' "$conf")
         if [ -n "$gen" ] && [ -f "${esp}/loader/entries/$gen-specialisation-lium.conf" ]; then
