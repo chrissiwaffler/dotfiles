@@ -158,6 +158,10 @@
     description = "Christoph";
     extraGroups = ["wheel" "networkmanager" "video" "audio" "input" "docker"];
     shell = pkgs.zsh;
+    # Hermes agent on starchips (remote admin over Tailscale)
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPfjda8YpZO5GpsBBrq0gDyETOwWwRSqoRPvhrxQt516 hermes-coding-agent"
+    ];
   };
 
   # Enable zsh system-wide
