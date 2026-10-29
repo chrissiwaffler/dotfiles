@@ -348,11 +348,13 @@ in {
     # this runs right after it and points loader.conf at the same
     # generation's lium entry instead. An EFI "LoaderEntryDefault" variable
     # (set via the menu's `d` key or `bootctl set-default`) would still take
-    # precedence; clear it with `sudo bootctl set-default ""`.
+    # precedence over loader.conf and keep booting a stale entry forever, so
+    # it is cleared on every rebuild: loader.conf is the single source of truth.
     (mkIf (cfg.enable && cfg.bootByDefault) {
       boot.loader.systemd-boot.extraInstallCommands = let
         esp = config.boot.loader.efi.efiSysMountPoint;
       in ''
+        ${pkgs.systemd}/bin/bootctl --esp-path=${esp} set-default "" || true
         conf=${esp}/loader/loader.conf
         gen=$(${pkgs.gnused}/bin/sed -n 's/^default \(nixos-generation-[0-9]*\)\.conf$/\1/p' "$conf")
         if [ -n "$gen" ] && [ -f "${esp}/loader/entries/$gen-specialisation-lium.conf" ]; then
