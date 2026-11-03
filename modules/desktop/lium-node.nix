@@ -133,6 +133,37 @@
             WantedBy=multi-user.target
           '';
         }
+        # CVE-2026-98432 (IPv4 TCP use-after-free, CVSS 9.8): drop IPv4 TCP
+        # packets carrying IP options until a fixed kernel ships via
+        # unattended-upgrades. prerouting hook: also covers forwarded pod
+        # traffic, not just input. destroy = no-op when absent (nft >= 1.0.8).
+        {
+          path = "/etc/cve-2026-98432.nft";
+          content = ''
+            destroy table ip cve_2026_98432
+            table ip cve_2026_98432 {
+              chain prerouting {
+                type filter hook prerouting priority -300; policy accept;
+                meta l4proto tcp ip hdrlength != 5 counter drop
+              }
+            }
+          '';
+        }
+        {
+          path = "/etc/systemd/system/cve-2026-98432.service";
+          content = ''
+            [Unit]
+            Description=CVE-2026-98432 mitigation (drop IPv4 TCP with IP options)
+
+            [Service]
+            Type=oneshot
+            ExecStart=/usr/sbin/nft -f /etc/cve-2026-98432.nft
+            RemainAfterExit=yes
+
+            [Install]
+            WantedBy=multi-user.target
+          '';
+        }
       ];
       apt.sources.docker = {
         source = "deb [arch=amd64 signed-by=$KEY_FILE] https://download.docker.com/linux/ubuntu $RELEASE stable";
@@ -150,6 +181,7 @@
         "docker-compose-plugin"
         "xfsprogs"
         "jq"
+        "nftables"
       ];
 
       runcmd = [
@@ -167,12 +199,15 @@
         "usermod -aG docker ${cfg.user}"
         "systemctl enable --now docker"
         "systemctl daemon-reload && systemctl enable lium-growfs.service"
+        "systemctl daemon-reload && systemctl enable --now cve-2026-98432.service"
       ];
       final_message = "lium-node provisioned after $UPTIME s";
     });
 
   metaData = pkgs.writeText "meta-data" ''
-    instance-id: ${vm.name}-1
+    # Bumping the instance-id re-runs cloud-init (new instance). -2: re-apply
+    # SSH keys (hermes agent) and the CVE-2026-98432 mitigation.
+    instance-id: ${vm.name}-2
     local-hostname: ${vm.name}
   '';
 
