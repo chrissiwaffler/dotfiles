@@ -375,15 +375,16 @@ in {
           fi
         done
         conf=${esp}/loader/loader.conf
-        # Newest generation from the ESP entries themselves (written by the
-        # builder before extraInstallCommands run); the system profile is not
-        # yet updated at this point.
-        gen=$(${pkgs.coreutils}/bin/ls "${esp}/loader/entries" | ${pkgs.gnused}/bin/sed -n 's/^nixos-generation-\([0-9]*\)\.conf$/\1/p' | ${pkgs.coreutils}/bin/sort -n | ${pkgs.coreutils}/bin/tail -1)
-        if [ -n "$gen" ] && [ -f "${esp}/loader/entries/$gen-specialisation-lium.conf" ]; then
-          ${pkgs.gnused}/bin/sed -i "s/^default .*/default $gen-specialisation-lium.conf/" "$conf"
-          echo "systemd-boot default: $gen-specialisation-lium.conf"
+        # sd-boot resolves the loader.conf default at BOOT time and supports
+        # globs: among matching entries the highest version (newest
+        # generation) wins. No gen-number math, no race with the builder's
+        # entry-write order.
+        if ${pkgs.coreutils}/bin/ls "${esp}/loader/entries" | ${pkgs.gnugrep}/bin/grep -q '^nixos-generation-.*-specialisation-lium\.conf$'; then
+          ${pkgs.gnused}/bin/sed -i "s/^default .*/default nixos-generation-*-specialisation-lium.conf/" "$conf"
+          ${pkgs.gnugrep}/bin/grep -q '^default ' "$conf" || echo "default nixos-generation-*-specialisation-lium.conf" >> "$conf"
+          echo "systemd-boot default: newest lium specialisation (glob)"
         else
-          echo "WARNING: no lium entry for generation $gen, default left unchanged"
+          echo "WARNING: no lium specialisation entries on ESP, default left unchanged"
         fi
       '';
     })
