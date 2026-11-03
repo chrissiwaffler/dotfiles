@@ -365,7 +365,8 @@ in {
           loaderVar=/sys/firmware/efi/efivars/$varName-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f
           if [ -e "$loaderVar" ]; then
             ${pkgs.e2fsprogs}/bin/chattr -i "$loaderVar" 2>/dev/null || true
-            rm -f "$loaderVar" || true
+            # The installer script runs with PATH=/empty; coreutils must be absolute.
+            ${pkgs.coreutils}/bin/rm -f "$loaderVar" || true
             if [ -e "$loaderVar" ]; then
               echo "WARNING: could not clear EFI $varName"
             else
@@ -374,9 +375,10 @@ in {
           fi
         done
         conf=${esp}/loader/loader.conf
-        # Newest generation from the system profile itself, not from loader.conf
-        # (which may still carry a previous run's lium-suffixed default).
-        gen=$(${pkgs.coreutils}/bin/ls /nix/var/nix/profiles | ${pkgs.gnused}/bin/sed -n 's/^system-\([0-9]*\)-link$/\1/p' | ${pkgs.coreutils}/bin/sort -n | ${pkgs.coreutils}/bin/tail -1)
+        # Newest generation from the ESP entries themselves (written by the
+        # builder before extraInstallCommands run); the system profile is not
+        # yet updated at this point.
+        gen=$(${pkgs.coreutils}/bin/ls "${esp}/loader/entries" | ${pkgs.gnused}/bin/sed -n 's/^nixos-generation-\([0-9]*\)\.conf$/\1/p' | ${pkgs.coreutils}/bin/sort -n | ${pkgs.coreutils}/bin/tail -1)
         if [ -n "$gen" ] && [ -f "${esp}/loader/entries/$gen-specialisation-lium.conf" ]; then
           ${pkgs.gnused}/bin/sed -i "s/^default .*/default $gen-specialisation-lium.conf/" "$conf"
           echo "systemd-boot default: $gen-specialisation-lium.conf"
