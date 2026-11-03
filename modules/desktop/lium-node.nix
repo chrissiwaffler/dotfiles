@@ -366,14 +366,22 @@ in {
           if [ -e "$loaderVar" ]; then
             ${pkgs.e2fsprogs}/bin/chattr -i "$loaderVar" 2>/dev/null || true
             rm -f "$loaderVar" || true
-            echo "cleared stale EFI $varName"
+            if [ -e "$loaderVar" ]; then
+              echo "WARNING: could not clear EFI $varName"
+            else
+              echo "cleared stale EFI $varName"
+            fi
           fi
         done
         conf=${esp}/loader/loader.conf
-        gen=$(${pkgs.gnused}/bin/sed -n 's/^default \(nixos-generation-[0-9]*\)\.conf$/\1/p' "$conf")
+        # Newest generation from the system profile itself, not from loader.conf
+        # (which may still carry a previous run's lium-suffixed default).
+        gen=$(${pkgs.coreutils}/bin/ls /nix/var/nix/profiles | ${pkgs.gnused}/bin/sed -n 's/^system-\([0-9]*\)-link$/\1/p' | ${pkgs.coreutils}/bin/sort -n | ${pkgs.coreutils}/bin/tail -1)
         if [ -n "$gen" ] && [ -f "${esp}/loader/entries/$gen-specialisation-lium.conf" ]; then
           ${pkgs.gnused}/bin/sed -i "s/^default .*/default $gen-specialisation-lium.conf/" "$conf"
           echo "systemd-boot default: $gen-specialisation-lium.conf"
+        else
+          echo "WARNING: no lium entry for generation $gen, default left unchanged"
         fi
       '';
     })
