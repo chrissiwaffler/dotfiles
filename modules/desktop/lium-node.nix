@@ -424,6 +424,22 @@ in {
       '';
     })
 
+    # CVE-2026-98432 (IPv4 TCP use-after-free, CVSS 9.8): drop IPv4 TCP with
+    # IP options until the kernel fix (6.18.56+) lands via a flake bump.
+    # Same rule as in the VM's cloud-init; host-wide (base AND lium mode).
+    (mkIf cfg.enable {
+      networking.nftables.enable = true;
+      networking.nftables.tables.cve-2026-98432 = {
+        family = "ip";
+        content = ''
+          chain prerouting {
+            type filter hook prerouting priority -300; policy accept;
+            meta l4proto tcp ip hdrlength != 5 counter drop
+          }
+        '';
+      };
+    })
+
     (mkIf cfg.active {
       assertions = [
         {
