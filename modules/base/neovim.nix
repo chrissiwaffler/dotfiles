@@ -4,7 +4,27 @@
   lib,
   inputs,
   ...
-}: {
+}: let
+  # Python provider host: pynvim (remote plugin API) + molten deps (jupyter_client, nbformat).
+  # Reads the extraPython3Packages option below — single source of truth.
+  nvimPython = pkgs.python3.withPackages (ps:
+    [ps.pynvim]
+    ++ (config.programs.neovim.extraPython3Packages ps));
+
+  # Lua env: magick rock for image.nvim (molten inline plots via kitty graphics protocol)
+  nvimLua = pkgs.luajit.withPackages (ps: [ps.magick]);
+
+  # ~/.config/nvim is a symlink to the kickstart fork, so home-manager's
+  # generated init.lua — where wrapRc = false normally delivers the provider
+  # config — never loads. Inject host procs + lua package paths via --cmd
+  # wrapper flags instead: they run before any user init on every invocation.
+  providerLua = lib.concatStringsSep ";" [
+    "package.path='${pkgs.luajit.pkgs.getLuaPath nvimLua};'..package.path"
+    "package.cpath='${pkgs.luajit.pkgs.getLuaCPath nvimLua};'..package.cpath"
+    "vim.g.python3_host_prog='${nvimPython}/bin/python3'"
+    "vim.g.node_host_prog='${pkgs.neovim-node-client}/bin/neovim-node-host'"
+  ];
+in {
   programs.neovim = {
     enable = true;
 
@@ -59,10 +79,9 @@
     withNodeJs = true;
     withRuby = false;
 
-    # Extra python packages for neovim
+    # Extra python packages for neovim (the host env in `nvimPython` adds these + pynvim)
     extraPython3Packages = ps:
       with ps; [
-        pynvim
         jupyter-client # molten-nvim kernel communication
         nbformat # molten import/export of .ipynb outputs
         numpy
@@ -70,8 +89,14 @@
         # matplotlib  # Commented out due to tkinter build issues
       ];
 
-    # Lua packages: magick rock for image.nvim (molten inline plots, kitty protocol)
+    # Lua packages for the wrapped nvim (same env as nvimLua above)
     extraLuaPackages = ps: [ps.magick];
+
+    # Provider/lua injection for symlinked-config setups (see providerLua above)
+    extraWrapperArgs = [
+      "--add-flags"
+      ''--cmd "lua ${providerLua}"''
+    ];
   };
 
   # Link your kickstart.nvim config
