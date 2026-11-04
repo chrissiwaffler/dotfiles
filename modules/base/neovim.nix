@@ -47,6 +47,7 @@
       fd
       git
       lazygit
+      (pkgs.python3Packages.jupytext) # .ipynb <-> plaintext CLI (jupytext.nvim)
 
       # ML specific
       pyright
@@ -62,12 +63,15 @@
     extraPython3Packages = ps:
       with ps; [
         pynvim
-        # jupyter-client  # Commented out due to matplotlib dependency
-        # ipython  # Commented out due to matplotlib dependency
+        jupyter-client # molten-nvim kernel communication
+        nbformat # molten import/export of .ipynb outputs
         numpy
         pandas
         # matplotlib  # Commented out due to tkinter build issues
       ];
+
+    # Lua packages: magick rock for image.nvim (molten inline plots, kitty protocol)
+    extraLuaPackages = ps: [ps.magick];
   };
 
   # Link your kickstart.nvim config
