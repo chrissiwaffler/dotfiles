@@ -37,11 +37,11 @@
     "kickstart-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1794151210,
-        "narHash": "sha256-X/fJkkLvylmUSaALucMda541romoVAAbsrp2CiQ4yGk=",
+        "lastModified": 1794151525,
+        "narHash": "sha256-0MpVzudgMXVX6iVpbM3NnZyZYo4+tQcPa9FatWchkp4=",
         "owner": "chrissiwaffler",
         "repo": "kickstart.nvim",
-        "rev": "509e672fc3bf965063235e01e60ef67d41313429",
+        "rev": "55475b02793394fdf1a0d3adb41a0eb1d1a4ebc9",
         "type": "github"
       },
       "original": {
