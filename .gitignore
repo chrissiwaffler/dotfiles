@@ -16,6 +16,7 @@ Thumbs.db
 
 # Agent session data
 .omo/
+.zcode/
 
 # sops-nix secrets - exclude private keys, allow encrypted files
 **/keys.txt
